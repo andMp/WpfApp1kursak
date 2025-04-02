@@ -67,10 +67,14 @@ namespace WpfApp1kursak
 
         private void NaGolClick(object sender, RoutedEventArgs e)
         {
-            if (NavigationService.CanGoBack)
+
+            Window mainWindow = Application.Current.MainWindow;
+            if (mainWindow is MainWindow mw)
             {
-                NavigationService.GoBack();
+                mw.MainFrame.Content = null; // Видаляємо сторінку з Frame
+                mw.SecondGrid.Visibility = Visibility.Visible; // Повертаємо головний грід
             }
+
         }
     }
 }

@@ -2,14 +2,7 @@
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static MaterialDesignThemes.Wpf.Theme;
+using System.Windows.Navigation;  // Необхідно додати
 
 namespace WpfApp1kursak
 {
@@ -18,13 +11,16 @@ namespace WpfApp1kursak
         public MainWindow()
         {
             InitializeComponent();
-            //MainFrame.Navigate(new Dim()); // Відкриваємо головну сторінку при запуску
         }
+
         private void ReestrButClick(object sender, RoutedEventArgs e)
         {
-            if (Application.Current.MainWindow is MainWindow mainWindow)
+            if (MainFrame != null)
             {
-                mainWindow.MainFrame.Navigate(new Reestr());
+                //SecondGrid.Visibility = Visibility.Visible;// Показати
+                SecondGrid.Visibility = Visibility.Collapsed;// Сховати
+                MainFrame.Content = null;
+                MainFrame.Navigate(new Reestr());
             }
         }
 
@@ -52,13 +48,17 @@ namespace WpfApp1kursak
 
                     if (Posada == 1)
                     {
-                        AdminPage adminPage = new AdminPage();
-                        this.NavigationService.Navigate(adminPage); // Перехід на сторінку адміністратора
+                        //Admin adminPage = new Admin();
+                        //MainFrame.Navigate(adminPage);
+                        MessageBox.Show("Заходимо на адміна!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
+                        SecondGrid.Visibility = Visibility.Collapsed;// Сховати
+                        MainFrame.Content = null;
+                        MainFrame.Navigate(new Admin(phoneText));
                     }
                     else
                     {
-                        UserPage userPage = new UserPage();
-                        this.NavigationService.Navigate(userPage); // Перехід на сторінку користувача
+                        User userPage = new User();
+                        MainFrame.Navigate(userPage);
                     }
                 }
                 else
@@ -70,6 +70,11 @@ namespace WpfApp1kursak
             {
                 MessageBox.Show("SQL помилка: " + ex.Message, "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void ExitClick(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

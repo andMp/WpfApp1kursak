@@ -1,0 +1,56 @@
+﻿<Page x:Class="WpfApp1kursak.Admin"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1kursak"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Admin">
+
+    <Grid Background="LightGray" Height="300" Width="700">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="80"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Посада:" HorizontalAlignment="Right"/>
+        <TextBlock Grid.Column="2" Grid.Row="0" Text="Ваше ім'я: " HorizontalAlignment="Right"/>
+        <TextBlock Grid.Column="1" Grid.Row="0" Text=" адмін" HorizontalAlignment="Left"/>
+        <TextBlock x:Name="id" Grid.Column="3" Grid.Row="0"/>
+        <TextBlock Grid.Column="2" Grid.Row="1" Text="Список всіх користувачів:" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+
+        <!-- Список користувачів -->
+        <ScrollViewer Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2">
+            <ListBox x:Name="UserList" SelectionChanged="UserList_SelectionChanged">
+                <!-- Сюди будуть додаватися елементи списку -->
+            </ListBox>
+        </ScrollViewer>
+        
+            <!-- Детальна інформація -->
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="Телефон:" HorizontalAlignment="Right"/>
+        <TextBlock x:Name="SelectedUserPhone" Grid.Column="1" Grid.Row="3"/>
+
+        <TextBlock Grid.Column="2" Grid.Row="3" Text="Інформація:" HorizontalAlignment="Right"/>
+        <TextBlock x:Name="SelectedUserInfo" Grid.Column="3" Grid.Row="3"/>
+
+
+
+        <!--<Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+            <TextBlock Text="Объединение 2 столбцов" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+        <Border Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2">
+            <TextBlock Text="Объединение 2 столбцов" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>-->
+
+    </Grid>
+</Page>

@@ -5,37 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1kursak"
         mc:Ignorable="d"
-        Title="Опитування" Height="300" Width="700">
-        <Grid Background="#B7BFCF">
-            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
-        <Border MinWidth="300" Margin="15" Background="#87CEEB" VerticalAlignment="Center" Padding="25" MaxWidth="650" CornerRadius="15">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="20" Color="Coral"  ShadowDepth="0"></DropShadowEffect>
-            </Border.Effect>
+        Title="Опитування" Height="430" Width="800">
+    <Grid Background="#B7BFCF">
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Grid x:Name="SecondGrid" Height="300" Width="700">
+            <Border MinWidth="300" MinHeight="230" Margin="15" Background="#87CEEB" VerticalAlignment="Center" Padding="25" MaxWidth="650" CornerRadius="15">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" Color="Coral" ShadowDepth="0"></DropShadowEffect>
+                </Border.Effect>
 
-            <StackPanel>
-                <TextBlock Text="Опитування!" FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
-                <Button HorizontalAlignment="Right" Content="Реєстрація" Click="ReestrButClick"/>
+                <StackPanel>
+                    <TextBlock Text="Опитування!" FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
+                    <Button HorizontalAlignment="Right" Content="Реєстрація" Click="ReestrButClick"/>
 
-                <Grid ShowGridLines="True">
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                    <Grid ShowGridLines="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Введіть телефон:" HorizontalAlignment="Left"/>
-                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Введіть пароль" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="tel" Grid.Column="1" Grid.Row="0"/>
-                    <PasswordBox x:Name="par" Grid.Column="1" Grid.Row="1"/>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Введіть телефон:" HorizontalAlignment="Left"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Введіть пароль" HorizontalAlignment="Left"/>
+                        <TextBox x:Name="tel" Grid.Column="1" Grid.Row="0"/>
+                        <PasswordBox x:Name="par" Grid.Column="1" Grid.Row="1"/>
+                    </Grid>
 
-                </Grid>
-
-                <Button Width="300" Content="Увійти" Click="VhidClick"/>
-            </StackPanel>
-        </Border>
+                    <Button Width="300" Content="Увійти" Click="VhidClick"/>
+                    <Button Width="180" Content="Завершити роботу" Click="ExitClick" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

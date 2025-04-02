@@ -97,5 +97,98 @@ namespace WpfApp1kursak
             return false; // Якщо користувача не знайдено
         }
 
+        //public (string pos, int id) GetAdminData(string phone)
+        //{
+        //    if (string.IsNullOrEmpty(connectionString))
+        //    {
+        //        MessageBox.Show("Помилка: Немає рядка підключення до бази даних!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        return (string.Empty, 0);
+        //    }
+
+        //    try
+        //    {
+        //        using (SqlConnection conn = new SqlConnection(connectionString))
+        //        {
+        //            conn.Open();
+        //            string query = "SELECT Posada, Id FROM Users WHERE Tel = @Phone";
+        //            using (SqlCommand cmd = new SqlCommand(query, conn))
+        //            {
+        //                cmd.Parameters.Add("@Phone", System.Data.SqlDbType.NVarChar, 15).Value = phone;
+
+        //                using (SqlDataReader reader = cmd.ExecuteReader())
+        //                {
+        //                    if (reader.Read())
+        //                    {
+        //                        string posada = reader["Posada"].ToString();
+        //                        int id = Convert.ToInt32(reader["Id"]);
+        //                        return (posada, id);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Помилка отримання даних: " + ex.Message, "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //    return (string.Empty, 0);
+        //}
+
+
+
+        // Отримує список телефонів користувачів
+        public List<string> GetUserList()
+        {
+            List<string> users = new List<string>();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT Tel FROM Users";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(reader["Tel"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Помилка отримання списку користувачів: " + ex.Message);
+            }
+
+            return users;
+        }
+
+        // Отримує інформацію про користувача за телефоном
+        public string GetUserInfo(string phone)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT Posada FROM Users WHERE Tel = @Phone";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Phone", phone);
+                        object result = cmd.ExecuteScalar();
+                        return result != null ? result.ToString() : "Немає даних";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Помилка отримання інформації: " + ex.Message);
+            }
+
+            return "Помилка";
+        }
+
     }
 }
