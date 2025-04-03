@@ -26,13 +26,14 @@
 
         <!-- Перегляд та редагування опитування -->
         <ScrollViewer Grid.Column="0" Grid.Row="2">
-            <!--<ListBox x:Name="OpitList" SelectionChanged="OpitList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel">
-                --><!-- Сюди будуть додаватися елементи списку --><!--
-            </ListBox>-->
+            <ListBox x:Name="OpitList" SelectionChanged="OpitList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel">
+                 <!--Сюди будуть додаватися елементи списку--> 
+            </ListBox>
         </ScrollViewer>
 
         <Grid Grid.Column="0" Grid.Row="3">
             <Grid.RowDefinitions>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -58,25 +59,28 @@
             <TextBlock Grid.Column="0" Grid.Row="5" Text="Рівень доступу" HorizontalAlignment="Left"/>
 
             <DockPanel Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2">
-                <TextBlock DockPanel.Dock="Left" Text="Питання:  "/>
+                <TextBlock DockPanel.Dock="Left" Text="Питання: "/>
                 <TextBlock DockPanel.Dock="Left" x:Name="diysn" Text="0"/>
-                <TextBlock DockPanel.Dock="Left" Text=" / " HorizontalAlignment="Left"/>
+                <TextBlock DockPanel.Dock="Left" Text="/" HorizontalAlignment="Left"/>
                 <TextBlock DockPanel.Dock="Left" x:Name="vsogo" Text="0"/>
 
-                <Button DockPanel.Dock="Right" Content="↑" Width="20"/>
+                <Button DockPanel.Dock="Right" Content="↓" Width="20"/>
                 <Button DockPanel.Dock="Right" Content="↑" Width="20" HorizontalAlignment="Right"/>
-                <!--<Button DockPanel.Dock="Right" Content="Видалити" HorizontalAlignment="Right"/>-->
+                <Button DockPanel.Dock="Right" Content="Видалити" HorizontalAlignment="Right" Padding="0"/>
+                <!--<Button DockPanel.Dock="Right" Content="Зберегти" HorizontalAlignment="Right" Padding="0"/>-->
             </DockPanel>
 
             <TextBox Grid.Column="0" Grid.Row="7" Text="" Grid.ColumnSpan="2"/>
-            <TextBlock Grid.Column="0" Grid.Row="8" Text="Додати питання:" Grid.ColumnSpan="2"/>
+            <TextBlock Grid.Column="0" Grid.Row="8" Text="Додати питання:" Grid.ColumnSpan="2" TextAlignment="Center"/>
             <TextBox Grid.Column="0" Grid.Row="9" Text="" Grid.ColumnSpan="2"/>
-            <!--<Button Grid.Column="0" Grid.Row="10" Content="Зберегти зміни" Click="ZberZmOpitButClick" Width="90" Grid.ColumnSpan="2"/>-->
+            <TextBlock Grid.Column="0" Grid.Row="10" Text="Час на відповідь"/>
+            <TextBox Grid.Column="1" Grid.Row="10" Text=""/>
+            <Button Grid.Column="0" Grid.Row="11" Content="Зберегти зміни" Click="ZberZmOpitButClick" Padding="0" Width="90" Grid.ColumnSpan="2"/>
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="20"/>
                 <RowDefinition/>
@@ -100,6 +104,13 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Облік результатів:" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Загальна к-ть голосів:" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Так" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Ні" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="-" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="-" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Не вклались в час" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="1" Text="-" HorizontalAlignment="Center"/>
             </Grid>
         </Grid>
 

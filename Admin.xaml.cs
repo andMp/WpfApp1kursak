@@ -193,7 +193,8 @@ namespace WpfApp1kursak
                 MessageBox.Show("Оберіть користувача для видалення.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
     }
-
 }
+
+
+
