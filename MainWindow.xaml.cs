@@ -53,7 +53,7 @@ namespace WpfApp1kursak
                         MessageBox.Show("Заходимо на адміна!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
                         SecondGrid.Visibility = Visibility.Collapsed;// Сховати
                         MainFrame.Content = null;
-                        MainFrame.Navigate(new Admin(phoneText));
+                        MainFrame.Navigate(new Admin());
                     }
                     else
                     {

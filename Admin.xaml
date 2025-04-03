@@ -5,52 +5,155 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1kursak"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="300" d:DesignWidth="700"
       Title="Admin">
 
-    <Grid Background="LightGray" Height="300" Width="700">
+    <Grid Background="LightGray" Height="300" Width="700" ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="20"></RowDefinition>
-            <RowDefinition Height="80"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="90"></ColumnDefinition>
+            <ColumnDefinition Width="90"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+
+
+
+        <!-- Перегляд та редагування опитування -->
+        <ScrollViewer Grid.Column="0" Grid.Row="2">
+            <!--<ListBox x:Name="OpitList" SelectionChanged="OpitList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel">
+                --><!-- Сюди будуть додаватися елементи списку --><!--
+            </ListBox>-->
+        </ScrollViewer>
+
+        <Grid Grid.Column="0" Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Перегляд та редагування опитування:" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Тема" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Тривалість опитування" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Column="0" Grid.Row="3" Text="Дата початку" HorizontalAlignment="Left"/>
+            <!--<CheckBox Grid.Column="1" Grid.Row="3" x:Name="checkBox1" IsChecked="False" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
+            <TextBlock Grid.Column="0" Grid.Row="4" Text="Дата завершення" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Column="0" Grid.Row="5" Text="Рівень доступу" HorizontalAlignment="Left"/>
+
+            <DockPanel Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2">
+                <TextBlock DockPanel.Dock="Left" Text="Питання:  "/>
+                <TextBlock DockPanel.Dock="Left" x:Name="diysn" Text="0"/>
+                <TextBlock DockPanel.Dock="Left" Text=" / " HorizontalAlignment="Left"/>
+                <TextBlock DockPanel.Dock="Left" x:Name="vsogo" Text="0"/>
+
+                <Button DockPanel.Dock="Right" Content="↑" Width="20"/>
+                <Button DockPanel.Dock="Right" Content="↑" Width="20" HorizontalAlignment="Right"/>
+                <!--<Button DockPanel.Dock="Right" Content="Видалити" HorizontalAlignment="Right"/>-->
+            </DockPanel>
+
+            <TextBox Grid.Column="0" Grid.Row="7" Text="" Grid.ColumnSpan="2"/>
+            <TextBlock Grid.Column="0" Grid.Row="8" Text="Додати питання:" Grid.ColumnSpan="2"/>
+            <TextBox Grid.Column="0" Grid.Row="9" Text="" Grid.ColumnSpan="2"/>
+            <!--<Button Grid.Column="0" Grid.Row="10" Content="Зберегти зміни" Click="ZberZmOpitButClick" Width="90" Grid.ColumnSpan="2"/>-->
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"  Text="Введіть тему опитування для його створення:"/>
+            <TextBox Grid.Row="1" Text=""/>
+            <Button Grid.Row="2" Content="Створити опитування" Width="130" HorizontalAlignment="Center"/>
+            
+            <Grid Grid.Column="0" Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Облік результатів:" HorizontalAlignment="Center"/>
+            </Grid>
+        </Grid>
+
+
+
+
+
+
+
+
+
 
         <TextBlock Grid.Column="0" Grid.Row="0" Text="Посада:" HorizontalAlignment="Right"/>
         <TextBlock Grid.Column="2" Grid.Row="0" Text="Ваше ім'я: " HorizontalAlignment="Right"/>
         <TextBlock Grid.Column="1" Grid.Row="0" Text=" адмін" HorizontalAlignment="Left"/>
         <TextBlock x:Name="id" Grid.Column="3" Grid.Row="0"/>
         <TextBlock Grid.Column="2" Grid.Row="1" Text="Список всіх користувачів:" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Перелік всіх опитувань:" HorizontalAlignment="Center"/>
 
         <!-- Список користувачів -->
         <ScrollViewer Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2">
-            <ListBox x:Name="UserList" SelectionChanged="UserList_SelectionChanged">
+            <ListBox x:Name="UserList" SelectionChanged="UserList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel">
                 <!-- Сюди будуть додаватися елементи списку -->
             </ListBox>
         </ScrollViewer>
-        
+        <Grid Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" ShowGridLines="True">
             <!-- Детальна інформація -->
-        <TextBlock Grid.Column="0" Grid.Row="3" Text="Телефон:" HorizontalAlignment="Right"/>
-        <TextBlock x:Name="SelectedUserPhone" Grid.Column="1" Grid.Row="3"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="85"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Column="2" Grid.Row="3" Text="Інформація:" HorizontalAlignment="Right"/>
-        <TextBlock x:Name="SelectedUserInfo" Grid.Column="3" Grid.Row="3"/>
+            <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Редагування користувача:" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Ім'я:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Пароль:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="3" Text="Посада:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="4" Text="Рівень доступу:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
+            <TextBox x:Name="telAdm" Grid.Column="1" Grid.Row="1" TextAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBox x:Name="parAdm" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBox x:Name="posAdm" Grid.Column="1" Grid.Row="3" TextAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBox x:Name="rivAdm" Grid.Column="1" Grid.Row="4" TextAlignment="Center" VerticalContentAlignment="Center"/>
 
-
-        <!--<Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
-            <TextBlock Text="Объединение 2 столбцов" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>
-        <Border Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2">
-            <TextBlock Text="Объединение 2 столбцов" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>-->
-
+            <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Content="Зберегти" Click="ZberZm" Height="20" Width="60" HorizontalAlignment="Center"/>
+            <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Content="Видалити користувача" Click="VidOblZapButClick" Height="20" Width="130" HorizontalAlignment="Center"/>
+        </Grid>
     </Grid>
 </Page>
