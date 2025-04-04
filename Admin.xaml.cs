@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -42,11 +43,13 @@ namespace WpfApp1kursak
 
 
         private List<Osoba> users;
+        private Dictionary<string, Opituvannya> Op;
 
         public Admin()
         {
             InitializeComponent();
             LoadUsers();
+            LoadOpituv();
         }
 
         private void LoadUsers()
@@ -57,7 +60,7 @@ namespace WpfApp1kursak
 
         private List<Osoba> GetUsersFromDatabase()
         {
-            List<Osoba> users = new List<Osoba>();
+            List<Osoba> us = new List<Osoba>();
             string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -68,7 +71,7 @@ namespace WpfApp1kursak
                 {
                     while (reader.Read())
                     {
-                        users.Add(new Osoba
+                        us.Add(new Osoba
                         {
                             Id = reader.GetInt32(0),
                             Tel = reader.GetString(1),
@@ -79,7 +82,7 @@ namespace WpfApp1kursak
                     }
                 }
             }
-            return users;
+            return us;
         }
 
         private void UserList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -90,10 +93,14 @@ namespace WpfApp1kursak
                 parAdm.Text = selectedUser.Parol;
                 posAdm.Text = selectedUser.Posada.ToString();
                 rivAdm.Text = selectedUser.RivDostupu.ToString();
+                if (selectedUser.Posada == 1)
+                {
+                    LoadOpituv(selectedUser.Tel);
+                }
             }
         }
 
-        private void ZberZm(object sender, RoutedEventArgs e)
+        private void ZberZmKor(object sender, RoutedEventArgs e)
         {
             if (UserList.SelectedItem is Osoba selectedUser)
             {
@@ -158,6 +165,7 @@ namespace WpfApp1kursak
             return null;
         }
 
+
         private void VidOblZapButClick(object sender, RoutedEventArgs e)
         {
             if (UserList.SelectedItem is Osoba selectedUser)
@@ -193,6 +201,76 @@ namespace WpfApp1kursak
                 MessageBox.Show("Оберіть користувача для видалення.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
+        public string SerializeOpituv(Opituv opituv)
+        {
+            return JsonConvert.SerializeObject(opituv);
+        }
+
+        public Opituvanna DeserializeOpituv(string json)
+        {
+            return JsonConvert.DeserializeObject<Opituvanna>(json);
+        }
+
+
+        private List<Opituvanna> LoadOpituv(string Tel)
+        {
+            //Dictionary<string, string> slovn1 = new Dictionary<string, string>();
+            //Dictionary<string, Opituvannya> slovn = new Dictionary<string, Opituvannya>();
+            //List<Osoba> us = new List<Osoba>();
+                       
+
+
+            string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                //string query = "SELECT Id, Tel, Par, Posada, RivDost FROM Users";
+                string query = "SELECT Opit FROM Users WHERE Tel = @Tel";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Tel", Tel);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string opit = reader.IsDBNull(0) ? null : reader.GetString(0);
+                            if (opit != null)
+                            {
+                                return DeserializeOpituv(opit);
+                            }
+                            else
+                            {
+                                return new Opituvanna();
+                            }
+                        }
+                    }
+                }
+
+
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        //us.Add(new Osoba
+                        //{
+                        //    Id = reader.GetInt32(0),
+                        //    Tel = reader.GetString(1),
+                        //    Parol = reader.GetString(2),
+                        //    Posada = reader.GetByte(3),
+                        //    RivDostupu = reader.GetByte(4)
+                        //});
+                        slovn1.Add(reader.GetString(0), reader.IsDBNull(1) ? null : reader.GetString(1));                          
+                    }
+                }
+            }
+            return slovn;
+        }
+
     }
 }
 

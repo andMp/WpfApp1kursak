@@ -15,9 +15,9 @@ namespace WpfApp1kursak
         public byte Posada { get; set; }
         public byte RivDostupu { get; set; }
 
-        public override string ToString()
-        {
-            return Tel; // Щоб у ListBox відображалося Tel користувача
-        }
+        //public override string ToString()
+        //{
+        //    return Tel; // Щоб у ListBox відображалося Tel користувача
+        //}
     }
 }

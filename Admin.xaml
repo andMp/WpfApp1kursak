@@ -132,7 +132,7 @@
 
         <!-- Список користувачів -->
         <ScrollViewer Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2">
-            <ListBox x:Name="UserList" SelectionChanged="UserList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel">
+            <ListBox x:Name="UserList" SelectionChanged="UserList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel" DisplayMemberPath="Tel">
                 <!-- Сюди будуть додаватися елементи списку -->
             </ListBox>
         </ScrollViewer>
@@ -163,7 +163,7 @@
             <TextBox x:Name="posAdm" Grid.Column="1" Grid.Row="3" TextAlignment="Center" VerticalContentAlignment="Center"/>
             <TextBox x:Name="rivAdm" Grid.Column="1" Grid.Row="4" TextAlignment="Center" VerticalContentAlignment="Center"/>
 
-            <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Content="Зберегти" Click="ZberZm" Height="20" Width="60" HorizontalAlignment="Center"/>
+            <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Content="Зберегти" Click="ZberZmKor" Height="20" Width="60" HorizontalAlignment="Center"/>
             <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Content="Видалити користувача" Click="VidOblZapButClick" Height="20" Width="130" HorizontalAlignment="Center"/>
         </Grid>
     </Grid>

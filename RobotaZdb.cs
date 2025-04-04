@@ -140,7 +140,6 @@ namespace WpfApp1kursak
         public List<string> GetUserList()
         {
             List<string> users = new List<string>();
-
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -161,7 +160,6 @@ namespace WpfApp1kursak
             {
                 MessageBox.Show("Помилка отримання списку користувачів: " + ex.Message);
             }
-
             return users;
         }
 
@@ -186,7 +184,6 @@ namespace WpfApp1kursak
             {
                 MessageBox.Show("Помилка отримання інформації: " + ex.Message);
             }
-
             return "Помилка";
         }
 
