@@ -31,19 +31,19 @@
             </ListBox>
         </ScrollViewer>
 
-        <Grid Grid.Column="0" Grid.Row="3">
+        <Grid Grid.Column="0" Grid.Row="3" ShowGridLines="True">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition Height="15.556"/>
                 <RowDefinition/>
+                <RowDefinition Height="35"/>
                 <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="35"/>
+                <!--<RowDefinition/>-->
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -52,11 +52,16 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Перегляд та редагування опитування:" HorizontalAlignment="Center"/>
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Тема" HorizontalAlignment="Left"/>
+            <TextBox x:Name="temaOp" Grid.Column="1" Grid.Row="1" TextAlignment="Center" VerticalContentAlignment="Center"/>
             <TextBlock Grid.Column="0" Grid.Row="2" Text="Тривалість опитування" HorizontalAlignment="Left"/>
+            <TextBox x:Name="trivOp" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalContentAlignment="Center"/>
             <TextBlock Grid.Column="0" Grid.Row="3" Text="Дата початку" HorizontalAlignment="Left"/>
+            <TextBox x:Name="datPochOp" Grid.Column="1" Grid.Row="3" TextAlignment="Center" VerticalContentAlignment="Center"/>
             <!--<CheckBox Grid.Column="1" Grid.Row="3" x:Name="checkBox1" IsChecked="False" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
             <TextBlock Grid.Column="0" Grid.Row="4" Text="Дата завершення" HorizontalAlignment="Left"/>
+            <TextBox x:Name="datZaverOp" Grid.Column="1" Grid.Row="4" TextAlignment="Center" VerticalContentAlignment="Center"/>
             <TextBlock Grid.Column="0" Grid.Row="5" Text="Рівень доступу" HorizontalAlignment="Left"/>
+            <TextBox x:Name="rivDostOp" Grid.Column="1" Grid.Row="5" TextAlignment="Center" VerticalContentAlignment="Center"/>
 
             <DockPanel Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2">
                 <TextBlock DockPanel.Dock="Left" Text="Питання: "/>
@@ -67,16 +72,32 @@
                 <Button DockPanel.Dock="Right" Content="↓" Width="20"/>
                 <Button DockPanel.Dock="Right" Content="↑" Width="20" HorizontalAlignment="Right"/>
                 <Button DockPanel.Dock="Right" Content="Видалити" HorizontalAlignment="Right" Padding="0"/>
-                <!--<Button DockPanel.Dock="Right" Content="Зберегти" HorizontalAlignment="Right" Padding="0"/>-->
+            </DockPanel>
+            <TextBox x:Name="poleVivedPitan" Grid.Column="0" Grid.Row="7" Text=""/>
+            <DockPanel Grid.Column="1" Grid.Row="7" LastChildFill="True">
+                <TextBlock DockPanel.Dock="Top" Text="Час для відповіді:" HorizontalAlignment="Center" />
+                <TextBox x:Name="chasNaVidpVidobr"/>
             </DockPanel>
 
-            <TextBox Grid.Column="0" Grid.Row="7" Text="" Grid.ColumnSpan="2"/>
-            <TextBlock Grid.Column="0" Grid.Row="8" Text="Додати питання:" Grid.ColumnSpan="2" TextAlignment="Center"/>
-            <TextBox Grid.Column="0" Grid.Row="9" Text="" Grid.ColumnSpan="2"/>
-            <TextBlock Grid.Column="0" Grid.Row="10" Text="Час на відповідь"/>
-            <TextBox Grid.Column="1" Grid.Row="10" Text=""/>
+
+
+            <TextBlock Grid.Column="0" Grid.Row="8" Text="Додавання питання:" TextAlignment="Center"/>
+            <Button Grid.Column="1" Grid.Row="8" Content="Додати" HorizontalAlignment="Center" Padding="0" Click="DodPitButClick"/>
+            <TextBox x:Name="dodPitOp" Grid.Column="0" Grid.Row="9" Text=""/>
+            <DockPanel Grid.Column="1" Grid.Row="9" LastChildFill="True">
+                <TextBlock DockPanel.Dock="Top" Text="Час для відповіді:" HorizontalAlignment="Center" />
+                <TextBox x:Name="chasNaVidpVkazati"/>
+            </DockPanel>
+            <!--<TextBlock Grid.Column="0" Grid.Row="10" Text="Час на відповідь"/>
+            <TextBox x:Name="chasNaVidpOp" Grid.Column="1" Grid.Row="10" Text=""/>-->
             <Button Grid.Column="0" Grid.Row="11" Content="Зберегти зміни" Click="ZberZmOpitButClick" Padding="0" Width="90" Grid.ColumnSpan="2"/>
         </Grid>
+        
+        
+        
+        
+        
+        
 
         <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="3">
             <Grid.RowDefinitions>

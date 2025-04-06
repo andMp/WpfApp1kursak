@@ -8,7 +8,7 @@ namespace WpfApp1kursak
 {
     public class Opituvanna
     {
-        //public Dictionary<string, Opituvannya> Op { get; set; }
+        ////public Dictionary<string, Opituvannya> Op { get; set; }
         public List<Opituv> Op { get; set; }
     }
     public class Opituv
