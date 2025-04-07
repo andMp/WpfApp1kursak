@@ -13,7 +13,7 @@ namespace WpfApp1kursak
     }
     public class Opituv
     {
-        //public string Telef {get;set; }
+        public string Telef {get;set; }
         public string Tema { get; set; }
         public string TrivOp { get; set; }
         public string DataPoch { get; set; }

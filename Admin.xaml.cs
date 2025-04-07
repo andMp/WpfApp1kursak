@@ -43,9 +43,10 @@ namespace WpfApp1kursak
 
         string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
         private List<Osoba> users;
-        //private List<Opituv> Op;
-        private Dictionary<string,Opituvanna> Op;
-        private Dictionary<string,Opituv> Op2;
+
+        //private List<Opituv> Op2;
+        private Dictionary<string,Opituvanna> slovnOp;
+        //private Dictionary<string,Opituv> Op2;
         private int PitanVRob;
         private int PitanVsogo;
 
@@ -63,8 +64,11 @@ namespace WpfApp1kursak
         }
         private void LoadOpituv()
         {
-            Op2 = GetOpituvFromDatabase();
-            OpitList.ItemsSource = Op2;
+            //Op2 = GetOpituvFromDatabase();
+            //Op = GetOpituvFromDatabase();
+            //OpitList.ItemsSource = Op2;
+            OpitList.ItemsSource = slovnOp.Values.SelectMany(x => x.Op).ToList();
+
         }
 
         private List<Osoba> GetUsersFromDatabase()
@@ -237,7 +241,7 @@ namespace WpfApp1kursak
         }
 
 
-        public string SerializeOpituv(Opituv opituv)
+        public string SerializeOpituv(Opituvanna opituv)
         {
             return JsonConvert.SerializeObject(opituv);
         }
@@ -251,21 +255,21 @@ namespace WpfApp1kursak
         //##########################################################################################################################
         //##########################################################################################################################
 
-        private Dictionary<string, Opituv> GetOpituvFromDatabase()
+        //private List<Opituv> GetOpituvFromDatabase()
+        private Dictionary<string,Opituvanna> GetOpituvFromDatabase()
         {
             //Dictionary<string, string> slovn1 = new Dictionary<string, string>();
-            Dictionary<string, Opituv> slovn = new Dictionary<string, Opituv>();
+            //List<Opituv> slovn = new List<Opituv>();
 
             //List<Opituvanna> us = new List<Opituvanna>();
             //Opituvanna us = new Opituvanna();
             //List<Opituv> us2 = new List<Opituv>();
-            //Dictionary<string, Opituvanna> us2 = new Dictionary<string, Opituvanna>();
+            Dictionary<string, Opituvanna> us2 = new Dictionary<string, Opituvanna>();
 
             //string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                //string query = "SELECT Id, Tel, Par, Posada, RivDost FROM Users";
                 string query = "SELECT Tel, Opit FROM Users WHERE Tel = 2";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 using (SqlDataReader reader = cmd.ExecuteReader())
@@ -273,8 +277,7 @@ namespace WpfApp1kursak
                     //cmd.Parameters.AddWithValue("@Tel", Tel);
                     while (reader.Read())
                     {
-                        Op.Add(reader.GetString(0), reader.IsDBNull(1) ? null : DeserializeOpituv(reader.GetString(1)));
-
+                        us2.Add(reader.GetString(0), reader.IsDBNull(1) ? null : DeserializeOpituv(reader.GetString(1)));
 
 
                         //string opit = reader.IsDBNull(0) ? null : reader.GetString(0);
@@ -313,34 +316,34 @@ namespace WpfApp1kursak
                 //        slovn1.Add(reader.GetString(0), reader.IsDBNull(1) ? null : reader.GetString(1));
                 //    }
                 //}
-
             }
-            foreach (KeyValuePair<string, Opituvanna> tel in Op)
-            {
-                if (tel.Value != null)
-                {
-                    foreach (Opituv op in tel.Value.Op)
-                    {
-                        slovn.Add(tel.Key, op);
-                    }
-                }
-                else
-                {
-                    slovn.Add(tel.Key, null);
-                }
-            }
-            return slovn;
+            //foreach (KeyValuePair<string, Opituvanna> tel in Op)
+            //{
+            //    if (tel.Value != null)
+            //    {
+            //        foreach (Opituv op in tel.Value.Op)
+            //        {
+            //            slovn.Add(op);
+            //        }
+            //    }
+                //else
+                //{
+                //    slovn.Add(tel.Key, null);
+                //}
+            //}
+            return us2;
         }
 
         private void ZberZmOpitButClick(object sender, RoutedEventArgs e)
         {
-            if (OpitList.SelectedItem is KeyValuePair<string, Opituv> selectedOp)
+            //if (OpitList.SelectedItem is KeyValuePair<string, Opituv> selectedOp)
+            if (OpitList.SelectedItem is Opituv selectedOp)
             {
-                selectedOp.Value.Tema = temaOp.Text;
-                selectedOp.Value.TrivOp = trivOp.Text;
-                selectedOp.Value.DataPoch = datPochOp.Text;
-                selectedOp.Value.DataZupin = datZaverOp.Text;
-                selectedOp.Value.RivDost = rivDostOp.Text;
+                selectedOp.Tema = temaOp.Text;
+                selectedOp.TrivOp = trivOp.Text;
+                selectedOp.DataPoch = datPochOp.Text;
+                selectedOp.DataZupin = datZaverOp.Text;
+                selectedOp.RivDost = rivDostOp.Text;
 
                 UpdateOpituvInDatabase(selectedOp);
                 MessageBox.Show("Зміни збережені!");
@@ -360,33 +363,48 @@ namespace WpfApp1kursak
                 //}
             }
         }
-        private void UpdateOpituvInDatabase(KeyValuePair<string, Opituv> op)
+        //private void UpdateOpituvInDatabase(KeyValuePair<string, Opituv> op)
+        private void UpdateOpituvInDatabase(Opituv op)
         {
+            //Opituvanna opit=new Opituvanna();
+            ////newOp = slovnOp[op.Telef].Op.Where(o => o.Tema == op.Tema);
+            ////slovnOp[op.Telef].Op[slovnOp[op.Telef].Op.FindIndex(o => o.Tema == op.Tema)]=op;
 
+            //opit.Op = slovnOp[op.Telef].Op;
+            //int index = opit.Op.FindIndex(o => o.Tema == op.Tema);
+            //if (index != -1)
+            //{
+            //    opit.Op[index] = op;
+            //}
 
-
-
-
-
-
-
-
-            //string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            //SerializeOpituv(opit);
+            if (slovnOp.TryGetValue(op.Telef, out Opituvanna opit))
             {
-                conn.Open();
-                string query = "UPDATE Users SET Opit = @Opit WHERE Id = @Id";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                int index = opit.Op.FindIndex(o => o.Tema == op.Tema);
+                if (index != -1)
                 {
-                    cmd.Parameters.AddWithValue("@Imya", user.Tel);
-                    cmd.Parameters.AddWithValue("@Parol", user.Parol);
-                    cmd.Parameters.AddWithValue("@Posada", user.Posada);
-                    cmd.Parameters.AddWithValue("@RivDostupu", user.RivDostupu);
-                    cmd.Parameters.AddWithValue("@Id", op.Key);
-                    cmd.ExecuteNonQuery();
+                    opit.Op[index] = op;
+
+                    // Зберігаємо назад у словник — хоча посилання те саме, це необов'язково, але можна явно
+                    slovnOp[op.Telef] = opit;
+
+                    // Серіалізуємо вже оновлений словник або об'єкт
+                    string serOpituv = SerializeOpituv(opit);
+                    //string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
+                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    {
+                        conn.Open();
+                        string query = "UPDATE Users SET Opit = @Opit WHERE Tel = @Tel";
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Opit", serOpituv);
+                            cmd.Parameters.AddWithValue("@Tel", op.Telef);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    MessageBox.Show("Зміни збережені!");
                 }
-            }
-            MessageBox.Show("Зміни збережені!");
+            }            
         }
     }
 }
