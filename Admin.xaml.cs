@@ -45,7 +45,7 @@ namespace WpfApp1kursak
         private List<Osoba> users;
 
         //private List<Opituv> Op2;
-        private Dictionary<string,Opituvanna> slovnOp;
+        private Dictionary<string, Opituvanna> slovnOp;
         //private Dictionary<string,Opituv> Op2;
         private int PitanVRob;
         private int PitanVsogo;
@@ -67,6 +67,7 @@ namespace WpfApp1kursak
             //Op2 = GetOpituvFromDatabase();
             //Op = GetOpituvFromDatabase();
             //OpitList.ItemsSource = Op2;
+            slovnOp = GetOpituvFromDatabase();
             OpitList.ItemsSource = slovnOp.Values.SelectMany(x => x.Op).ToList();
 
         }
@@ -117,24 +118,19 @@ namespace WpfApp1kursak
         {
             if (OpitList.SelectedItem is KeyValuePair<string, Opituv> selectedOp)
             {
-                //foreach (Opituv op in selectedOp.Op)
-                //{
-                    temaOp.Text = selectedOp.Value.Tema;
-                    trivOp.Text = selectedOp.Value.TrivOp;
-                    datPochOp.Text = selectedOp.Value.DataPoch;
-                    datZaverOp.Text = selectedOp.Value.DataZupin;
-                    rivDostOp.Text = selectedOp.Value.RivDost;
+                temaOp.Text = selectedOp.Value.Tema;
+                trivOp.Text = selectedOp.Value.TrivOp;
+                datPochOp.Text = selectedOp.Value.DataPoch;
+                datZaverOp.Text = selectedOp.Value.DataZupin;
+                rivDostOp.Text = selectedOp.Value.RivDost;
 
-                    diysn.Text = selectedOp.Value.Pitanni.Count==0?"0":"1";
-                    PitanVRob = 1;
-                    vsogo.Text = selectedOp.Value.Pitanni.Count == 0 ? "0" : selectedOp.Value.Pitanni.Count.ToString();
-                    PitanVsogo = selectedOp.Value.Pitanni.Count;
+                diysn.Text = selectedOp.Value.Pitanni.Count == 0 ? "0" : "1";
+                PitanVRob = 1;
+                vsogo.Text = selectedOp.Value.Pitanni.Count == 0 ? "0" : selectedOp.Value.Pitanni.Count.ToString();
+                PitanVsogo = selectedOp.Value.Pitanni.Count;
 
-                    poleVivedPitan.Text= selectedOp.Value.Pitanni.Count > 0? selectedOp.Value.Pitanni[0].Pitan : "-";
-                    chasNaVidpVidobr.Text= selectedOp.Value.Pitanni.Count > 0 ? selectedOp.Value.Pitanni[PitanVRob].TrivPit : "-";
-
-                    //rivAdm.Text = selectedOp.RivDostupu.ToString();
-                //}
+                poleVivedPitan.Text = selectedOp.Value.Pitanni.Count > 0 ? selectedOp.Value.Pitanni[0].Pitan : "-";
+                chasNaVidpVidobr.Text = selectedOp.Value.Pitanni.Count > 0 ? selectedOp.Value.Pitanni[PitanVRob].TrivPit : "-";
             }
         }
 
@@ -256,7 +252,7 @@ namespace WpfApp1kursak
         //##########################################################################################################################
 
         //private List<Opituv> GetOpituvFromDatabase()
-        private Dictionary<string,Opituvanna> GetOpituvFromDatabase()
+        private Dictionary<string, Opituvanna> GetOpituvFromDatabase()
         {
             //Dictionary<string, string> slovn1 = new Dictionary<string, string>();
             //List<Opituv> slovn = new List<Opituv>();
@@ -278,65 +274,14 @@ namespace WpfApp1kursak
                     while (reader.Read())
                     {
                         us2.Add(reader.GetString(0), reader.IsDBNull(1) ? null : DeserializeOpituv(reader.GetString(1)));
-
-
-                        //string opit = reader.IsDBNull(0) ? null : reader.GetString(0);
-                        //if (opit != null)
-                        //{
-                        //    //us.Add(DeserializeOpituv(opit));
-
-                        //    us = DeserializeOpituv(opit);
-                        //    foreach (Opituv opituv in us.Op)
-                        //    {
-                        //        us2.Add(opituv);
-                        //    }
-                        //}
-
-
-                        //else
-                        //{
-                        //    us.Add(new Opituvanna());
-                        //}
                     }
                 }
-
-                //using (SqlCommand cmd = new SqlCommand(query, conn))
-                //using (SqlDataReader reader = cmd.ExecuteReader())
-                //{
-                //    while (reader.Read())
-                //    {
-                //        us.Add(new Osoba
-                //        {
-                //            Id = reader.GetInt32(0),
-                //            Tel = reader.GetString(1),
-                //            Parol = reader.GetString(2),
-                //            Posada = reader.GetByte(3),
-                //            RivDostupu = reader.GetByte(4)
-                //        });
-                //        slovn1.Add(reader.GetString(0), reader.IsDBNull(1) ? null : reader.GetString(1));
-                //    }
-                //}
             }
-            //foreach (KeyValuePair<string, Opituvanna> tel in Op)
-            //{
-            //    if (tel.Value != null)
-            //    {
-            //        foreach (Opituv op in tel.Value.Op)
-            //        {
-            //            slovn.Add(op);
-            //        }
-            //    }
-                //else
-                //{
-                //    slovn.Add(tel.Key, null);
-                //}
-            //}
             return us2;
         }
 
         private void ZberZmOpitButClick(object sender, RoutedEventArgs e)
         {
-            //if (OpitList.SelectedItem is KeyValuePair<string, Opituv> selectedOp)
             if (OpitList.SelectedItem is Opituv selectedOp)
             {
                 selectedOp.Tema = temaOp.Text;
@@ -347,23 +292,9 @@ namespace WpfApp1kursak
 
                 UpdateOpituvInDatabase(selectedOp);
                 MessageBox.Show("Зміни збережені!");
-
-                //if (byte.TryParse(posAdm.Text, out byte posada) && byte.TryParse(rivAdm.Text, out byte rivDostupu))
-                //{
-                //    selectedUser.Posada = posada;
-                //    selectedUser.RivDostupu = rivDostupu;
-
-                //    UpdateUserInDatabase(selectedUser);
-                //    MessageBox.Show("Зміни збережені!");
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Помилка! Поля 'Посада' і 'Рівень доступу' повинні бути числами від 0 до 255.",
-                //                    "Помилка вводу", MessageBoxButton.OK, MessageBoxImage.Warning);
-                //}
             }
         }
-        //private void UpdateOpituvInDatabase(KeyValuePair<string, Opituv> op)
+
         private void UpdateOpituvInDatabase(Opituv op)
         {
             //Opituvanna opit=new Opituvanna();
@@ -404,7 +335,29 @@ namespace WpfApp1kursak
                     }
                     MessageBox.Show("Зміни збережені!");
                 }
-            }            
+            }
+        }
+
+        private void DodPitButClick(object sender, RoutedEventArgs e)
+        {
+            string pitannDlaOpit = dodPitOp.Text?.Trim();
+            string poleChasNaVidpVkaz = chasNaVidpVkazati.Text?.Trim();
+
+            if (string.IsNullOrEmpty(pitannDlaOpit) || string.IsNullOrEmpty(poleChasNaVidpVkaz))
+            {
+                MessageBox.Show("Будь ласка, заповніть усі поля!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            Pytannia pit = new Pytannia();
+            pit.Pitan = pitannDlaOpit;
+            pit.TrivPit = poleChasNaVidpVkaz;
+
+            if (OpitList.SelectedItem is Opituv selectedOp)
+            {
+                selectedOp.Pitanni.Add(pit);
+                UpdateOpituvInDatabase(selectedOp);
+                MessageBox.Show("Зміни збережені!");
+            }
         }
     }
 }

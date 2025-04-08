@@ -25,7 +25,7 @@ namespace WpfApp1kursak
     {
         public string Pitan { get; set; }
         public string TrivPit { get; set; }
-        public string Vidp { get; set; }
-        public string KstVidp { get; set; }
+        public int Vidp { get; set; }//0 - "ні", 1 - "так", 2 - "не вклались в час"
+        public int KstVidp { get; set; } = 0;
     }
 }
