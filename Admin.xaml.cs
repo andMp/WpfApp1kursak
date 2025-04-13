@@ -49,12 +49,14 @@ namespace WpfApp1kursak
         //private Dictionary<string,Opituv> Op2;
         private int PitanVRob;
         private int PitanVsogo;
+        private string idAdmina;
 
-        public Admin()
+        public Admin(string id)
         {
             InitializeComponent();
             LoadUsers();
             LoadOpituv();
+            idAdmina = id;
         }
 
         private void LoadUsers()
@@ -111,26 +113,6 @@ namespace WpfApp1kursak
                 //{
                 //    GetOpituvFromDatabase(selectedUser.Tel);
                 //}
-            }
-        }
-
-        private void OpitList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (OpitList.SelectedItem is KeyValuePair<string, Opituv> selectedOp)
-            {
-                temaOp.Text = selectedOp.Value.Tema;
-                trivOp.Text = selectedOp.Value.TrivOp;
-                datPochOp.Text = selectedOp.Value.DataPoch;
-                datZaverOp.Text = selectedOp.Value.DataZupin;
-                rivDostOp.Text = selectedOp.Value.RivDost;
-
-                diysn.Text = selectedOp.Value.Pitanni.Count == 0 ? "0" : "1";
-                PitanVRob = 1;
-                vsogo.Text = selectedOp.Value.Pitanni.Count == 0 ? "0" : selectedOp.Value.Pitanni.Count.ToString();
-                PitanVsogo = selectedOp.Value.Pitanni.Count;
-
-                poleVivedPitan.Text = selectedOp.Value.Pitanni.Count > 0 ? selectedOp.Value.Pitanni[0].Pitan : "-";
-                chasNaVidpVidobr.Text = selectedOp.Value.Pitanni.Count > 0 ? selectedOp.Value.Pitanni[PitanVRob].TrivPit : "-";
             }
         }
 
@@ -251,31 +233,62 @@ namespace WpfApp1kursak
         //##########################################################################################################################
         //##########################################################################################################################
 
+        private void OpitList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (OpitList.SelectedItem is KeyValuePair<string, Opituv> selectedOp)
+            {
+                temaOp.Text = selectedOp.Value.Tema;
+                trivOp.Text = selectedOp.Value.TrivOp;
+                datPochOp.Text = selectedOp.Value.DataPoch;
+                datZaverOp.Text = selectedOp.Value.DataZupin;
+                rivDostOp.Text = selectedOp.Value.RivDost;
+
+                diysn.Text = selectedOp.Value.Pitanni.Count == 0 ? "0" : "1";
+                PitanVRob = 1;
+                vsogo.Text = selectedOp.Value.Pitanni.Count == 0 ? "0" : selectedOp.Value.Pitanni.Count.ToString();
+                PitanVsogo = selectedOp.Value.Pitanni.Count;
+
+                poleVivedPitan.Text = selectedOp.Value.Pitanni.Count > 0 ? selectedOp.Value.Pitanni[0].Pitan : "-";
+                chasNaVidpVidobr.Text = selectedOp.Value.Pitanni.Count > 0 ? selectedOp.Value.Pitanni[PitanVRob].TrivPit : "-";
+            }
+        }
+
         //private List<Opituv> GetOpituvFromDatabase()
         private Dictionary<string, Opituvanna> GetOpituvFromDatabase()
         {
-            //Dictionary<string, string> slovn1 = new Dictionary<string, string>();
-            //List<Opituv> slovn = new List<Opituv>();
+            MessageBox.Show("GetOpituvFromDatabase стартує");
 
-            //List<Opituvanna> us = new List<Opituvanna>();
-            //Opituvanna us = new Opituvanna();
-            //List<Opituv> us2 = new List<Opituv>();
             Dictionary<string, Opituvanna> us2 = new Dictionary<string, Opituvanna>();
-
-            //string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
-                conn.Open();
-                string query = "SELECT Tel, Opit FROM Users WHERE Tel = 2";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                //Dictionary<string, string> slovn1 = new Dictionary<string, string>();
+                //List<Opituv> slovn = new List<Opituv>();
+
+                //List<Opituvanna> us = new List<Opituvanna>();
+                //Opituvanna us = new Opituvanna();
+                //List<Opituv> us2 = new List<Opituv>();
+
+                //string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    //cmd.Parameters.AddWithValue("@Tel", Tel);
-                    while (reader.Read())
+                    MessageBox.Show("Перед conn.Open()");
+                    conn.Open();
+                    MessageBox.Show("Після conn.Open()");
+                    string query = "SELECT Tel, Opit FROM Users WHERE Posada = 1";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        us2.Add(reader.GetString(0), reader.IsDBNull(1) ? null : DeserializeOpituv(reader.GetString(1)));
+                        //cmd.Parameters.AddWithValue("@Tel", Tel);
+                        while (reader.Read())
+                        {
+                            us2.Add(reader.GetString(0), reader.IsDBNull(1) ? null : DeserializeOpituv(reader.GetString(1)));
+                        }
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Помилка в GetOpituvFromDatabase: " + ex.Message, "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return us2;
         }
@@ -357,6 +370,45 @@ namespace WpfApp1kursak
                 selectedOp.Pitanni.Add(pit);
                 UpdateOpituvInDatabase(selectedOp);
                 MessageBox.Show("Зміни збережені!");
+            }
+        }
+
+        private void stvorNovTemOpit(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string newTemaOpit = vvedNovTem.Text?.Trim();
+                if (string.IsNullOrEmpty(newTemaOpit))
+                {
+                    MessageBox.Show("Будь ласка, введіть тему опитування!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                if (slovnOp[idAdmina]!=null && slovnOp[idAdmina].Op.Any(x => x.Tema == newTemaOpit))
+                {
+                    MessageBox.Show("Опитування на дану тему вже існує!\tПідберіть іншу тему", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                Opituv novOp = new Opituv();
+                novOp.Tema = newTemaOpit;
+                novOp.Telef = idAdmina;
+                //slovnOp[idAdmina].Op.Add(novOp);
+
+                if (slovnOp.TryGetValue(novOp.Telef, out Opituvanna opituvanna))
+                {
+                    opituvanna.Op.Add(novOp);
+                }
+                else
+                {
+                    slovnOp[novOp.Telef] = new Opituvanna
+                    {
+                        Op = new List<Opituv> { novOp }
+                    };
+                }
+                UpdateOpituvInDatabase(novOp);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Сталася помилка в stvorNovTemOpit: " + ex.Message, "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
