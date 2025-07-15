@@ -22,31 +22,10 @@ namespace WpfApp1kursak
     /// </summary>
     public partial class Admin : Page
     {
-        //private RobotaZdb db = new RobotaZdb();
-        //private List<string> users = new List<string>(); // Список телефонів
-
-        //public Admin(string p)
-        //{
-        //    InitializeComponent();
-        //    id.Text = p;
-        //    LoadUsers();
-        //}
-        //private void LoadUsers()
-        //{
-        //    users = db.GetUserList(); // Отримуємо телефони користувачів
-        //    UserList.Items.Clear();
-        //    foreach (var user in users)
-        //    {
-        //        UserList.Items.Add(user); // Додаємо у ListBox
-        //    }
-        //}
-
         string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
         private List<Osoba> users;
 
-        //private List<Opituv> Op2;
         private Dictionary<string, Opituvanna> slovnOp;
-        //private Dictionary<string,Opituv> Op2;
         private int PitanVRob;
         private int PitanVsogo;
         private string idAdmina;
@@ -66,12 +45,8 @@ namespace WpfApp1kursak
         }
         private void LoadOpituv()
         {
-            //Op2 = GetOpituvFromDatabase();
-            //Op = GetOpituvFromDatabase();
-            //OpitList.ItemsSource = Op2;
             slovnOp = GetOpituvFromDatabase();
-            OpitList.ItemsSource = slovnOp.Values.SelectMany(x => x.Op).ToList();
-
+            OpitList.ItemsSource = slovnOp.Values.Where(x => x != null && x.Op != null).SelectMany(x => x.Op).ToList();
         }
 
         private List<Osoba> GetUsersFromDatabase()
@@ -235,50 +210,68 @@ namespace WpfApp1kursak
 
         private void OpitList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (OpitList.SelectedItem is KeyValuePair<string, Opituv> selectedOp)
+            try
             {
-                temaOp.Text = selectedOp.Value.Tema;
-                trivOp.Text = selectedOp.Value.TrivOp;
-                datPochOp.Text = selectedOp.Value.DataPoch;
-                datZaverOp.Text = selectedOp.Value.DataZupin;
-                rivDostOp.Text = selectedOp.Value.RivDost;
+                if (OpitList.SelectedItem is Opituv selectedOp)
+                {
+                    MessageBox.Show("Опитування вибрано: " + (selectedOp?.Tema ?? "null"));
 
-                diysn.Text = selectedOp.Value.Pitanni.Count == 0 ? "0" : "1";
-                PitanVRob = 1;
-                vsogo.Text = selectedOp.Value.Pitanni.Count == 0 ? "0" : selectedOp.Value.Pitanni.Count.ToString();
-                PitanVsogo = selectedOp.Value.Pitanni.Count;
+                    temaOp.Text = selectedOp.Tema;
+                    trivOp.Text = selectedOp.TrivOp;
+                    if (DateTime.TryParse(selectedOp.DataPoch, out DateTime dp))
+                        datPochOp.SelectedDate = dp;
+                    if (DateTime.TryParse(selectedOp.DataZupin, out DateTime dz))
+                        datZaverOp.SelectedDate = dz;
+                    rivDostOp.Text = selectedOp.RivDost;
 
-                poleVivedPitan.Text = selectedOp.Value.Pitanni.Count > 0 ? selectedOp.Value.Pitanni[0].Pitan : "-";
-                chasNaVidpVidobr.Text = selectedOp.Value.Pitanni.Count > 0 ? selectedOp.Value.Pitanni[PitanVRob].TrivPit : "-";
+                    if (selectedOp.Pitanni == null)
+                    {
+                        MessageBox.Show("Pitanni є NULL. Створюємо новий список.");
+                        selectedOp.Pitanni = new List<Pytannia>();
+                    }
+
+                    vsogo.Text = selectedOp.Pitanni.Count.ToString();
+                    PitanVsogo = selectedOp.Pitanni.Count;
+
+                    if (selectedOp.Pitanni.Count > 0)
+                    {
+                        PitanVRob = 0;
+                        diysn.Text = "1";
+                        poleVivedPitan.Text = selectedOp.Pitanni[PitanVRob].Pitan;
+                        chasNaVidpVidobr.Text = selectedOp.Pitanni[PitanVRob].TrivPit;
+                    }
+                    else
+                    {
+                        diysn.Text = "0";
+                        PitanVRob = 0;
+                        poleVivedPitan.Text = "-";
+                        chasNaVidpVidobr.Text = "-";
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("OpitList.SelectedItem не є Opituv");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("❌ Помилка при виборі опитування: " + ex.Message);
             }
         }
 
-        //private List<Opituv> GetOpituvFromDatabase()
+
         private Dictionary<string, Opituvanna> GetOpituvFromDatabase()
         {
-            MessageBox.Show("GetOpituvFromDatabase стартує");
-
             Dictionary<string, Opituvanna> us2 = new Dictionary<string, Opituvanna>();
             try
             {
-                //Dictionary<string, string> slovn1 = new Dictionary<string, string>();
-                //List<Opituv> slovn = new List<Opituv>();
-
-                //List<Opituvanna> us = new List<Opituvanna>();
-                //Opituvanna us = new Opituvanna();
-                //List<Opituv> us2 = new List<Opituv>();
-
-                //string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    MessageBox.Show("Перед conn.Open()");
                     conn.Open();
-                    MessageBox.Show("Після conn.Open()");
                     string query = "SELECT Tel, Opit FROM Users WHERE Posada = 1";
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        //cmd.Parameters.AddWithValue("@Tel", Tel);
                         while (reader.Read())
                         {
                             us2.Add(reader.GetString(0), reader.IsDBNull(1) ? null : DeserializeOpituv(reader.GetString(1)));
@@ -286,7 +279,7 @@ namespace WpfApp1kursak
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Помилка в GetOpituvFromDatabase: " + ex.Message, "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -299,8 +292,8 @@ namespace WpfApp1kursak
             {
                 selectedOp.Tema = temaOp.Text;
                 selectedOp.TrivOp = trivOp.Text;
-                selectedOp.DataPoch = datPochOp.Text;
-                selectedOp.DataZupin = datZaverOp.Text;
+                selectedOp.DataPoch = datPochOp.SelectedDate?.ToString("yyyy-MM-dd") ?? "";
+                selectedOp.DataZupin = datZaverOp.SelectedDate?.ToString("yyyy-MM-dd") ?? "";
                 selectedOp.RivDost = rivDostOp.Text;
 
                 UpdateOpituvInDatabase(selectedOp);
@@ -377,13 +370,14 @@ namespace WpfApp1kursak
         {
             try
             {
+                MessageBox.Show("Починаємо створювати опитув.1");
                 string newTemaOpit = vvedNovTem.Text?.Trim();
                 if (string.IsNullOrEmpty(newTemaOpit))
                 {
                     MessageBox.Show("Будь ласка, введіть тему опитування!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                if (slovnOp[idAdmina]!=null && slovnOp[idAdmina].Op.Any(x => x.Tema == newTemaOpit))
+                if (slovnOp[idAdmina] != null && slovnOp[idAdmina].Op.Any(x => x.Tema == newTemaOpit))
                 {
                     MessageBox.Show("Опитування на дану тему вже існує!\tПідберіть іншу тему", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
@@ -391,10 +385,17 @@ namespace WpfApp1kursak
                 Opituv novOp = new Opituv();
                 novOp.Tema = newTemaOpit;
                 novOp.Telef = idAdmina;
-                //slovnOp[idAdmina].Op.Add(novOp);
-
                 if (slovnOp.TryGetValue(novOp.Telef, out Opituvanna opituvanna))
                 {
+                    if (opituvanna == null)
+                    {
+                        opituvanna = new Opituvanna();
+                        slovnOp[novOp.Telef] = opituvanna;
+                    }
+                    if (opituvanna.Op == null)
+                    {
+                        opituvanna.Op = new List<Opituv>();
+                    }
                     opituvanna.Op.Add(novOp);
                 }
                 else

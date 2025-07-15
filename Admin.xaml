@@ -5,10 +5,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1kursak"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="700"
+      d:DesignHeight="500" d:DesignWidth="700"
       Title="Admin">
 
-    <Grid Background="LightGray" Height="300" Width="700" ShowGridLines="True">
+    <Grid Background="LightGray" MinHeight="300" Width="700" ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="20"></RowDefinition>
@@ -21,8 +21,6 @@
             <ColumnDefinition Width="90"></ColumnDefinition>
             <ColumnDefinition Width="90"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
-
 
         <!-- Перегляд та редагування опитування -->
         <ScrollViewer Grid.Column="0" Grid.Row="2">
@@ -55,9 +53,10 @@
             <TextBlock Grid.Column="0" Grid.Row="2" Text="Тривалість опитування" HorizontalAlignment="Left"/>
             <TextBox x:Name="trivOp" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalContentAlignment="Center"/>
             <TextBlock Grid.Column="0" Grid.Row="3" Text="Дата початку" HorizontalAlignment="Left"/>
-            <TextBox x:Name="datPochOp" Grid.Column="1" Grid.Row="3" TextAlignment="Center" VerticalContentAlignment="Center"/>
+            <DatePicker x:Name="datPochOp" Grid.Column="1" Grid.Row="3" SelectedDateFormat="Short" Height="35"/>
             <TextBlock Grid.Column="0" Grid.Row="4" Text="Дата завершення" HorizontalAlignment="Left"/>
-            <TextBox x:Name="datZaverOp" Grid.Column="1" Grid.Row="4" TextAlignment="Center" VerticalContentAlignment="Center"/>
+            <!--<TextBox x:Name="datZaverOp" Grid.Column="1" Grid.Row="4" TextAlignment="Center" VerticalContentAlignment="Center"/>-->
+            <DatePicker x:Name="datZaverOp" Grid.Column="1" Grid.Row="4" SelectedDateFormat="Short"/>
             <TextBlock Grid.Column="0" Grid.Row="5" Text="Рівень доступу" HorizontalAlignment="Left"/>
             <TextBox x:Name="rivDostOp" Grid.Column="1" Grid.Row="5" TextAlignment="Center" VerticalContentAlignment="Center"/>
             <Button Grid.Column="0" Grid.Row="6" Content="Зберегти зміни" Click="ZberZmOpitButClick" Padding="0" Width="90" Grid.ColumnSpan="2"/>
@@ -92,11 +91,6 @@
         </Grid>
         
         
-        
-        
-        
-        
-
         <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
@@ -132,14 +126,6 @@
                 <TextBlock Grid.Row="4" Grid.Column="1" Text="-" HorizontalAlignment="Center"/>
             </Grid>
         </Grid>
-
-
-
-
-
-
-
-
 
 
         <TextBlock Grid.Column="0" Grid.Row="0" Text="Посада:" HorizontalAlignment="Right"/>

@@ -19,7 +19,7 @@ namespace WpfApp1kursak
         public string DataPoch { get; set; }
         public string DataZupin { get; set; }
         public string RivDost { get; set; }
-        public List<Pytannia> Pitanni { get; set; }
+        public List<Pytannia> Pitanni { get; set; } = new List<Pytannia>();
     }
     public class Pytannia
     {
