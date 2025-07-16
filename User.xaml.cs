@@ -20,9 +20,10 @@ namespace WpfApp1kursak
     /// </summary>
     public partial class User : Page
     {
-        public User()
+        public User(string id)
         {
             InitializeComponent();
+            this.id.Text = $"Особистий кабінет користувача {nameof(User)} з телефоном = {id}:";
         }
     }
 }

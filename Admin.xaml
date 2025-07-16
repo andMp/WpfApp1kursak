@@ -50,8 +50,8 @@
             <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Перегляд та редагування опитування:" HorizontalAlignment="Center"/>
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Тема" HorizontalAlignment="Left"/>
             <TextBox x:Name="temaOp" Grid.Column="1" Grid.Row="1" TextAlignment="Center" VerticalContentAlignment="Center"/>
-            <TextBlock Grid.Column="0" Grid.Row="2" Text="Тривалість опитування" HorizontalAlignment="Left"/>
-            <TextBox x:Name="trivOp" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Трив-сть опитув. (хв.)" HorizontalAlignment="Left"/>
+            <TextBox x:Name="trivOp" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalContentAlignment="Center" PreviewTextInput="TrivOp_PreviewTextInput" MaxLength="3"/>
             <TextBlock Grid.Column="0" Grid.Row="3" Text="Дата початку" HorizontalAlignment="Left"/>
             <DatePicker x:Name="datPochOp" Grid.Column="1" Grid.Row="3" SelectedDateFormat="Short" Height="35"/>
             <TextBlock Grid.Column="0" Grid.Row="4" Text="Дата завершення" HorizontalAlignment="Left"/>
@@ -67,8 +67,8 @@
                 <TextBlock DockPanel.Dock="Left" Text="/" HorizontalAlignment="Left"/>
                 <TextBlock DockPanel.Dock="Left" x:Name="vsogo" Text="0"/>
 
-                <Button DockPanel.Dock="Right" Content="↓" Width="20"/>
-                <Button DockPanel.Dock="Right" Content="↑" Width="20" HorizontalAlignment="Right"/>
+                <Button x:Name="PerehPytDown" DockPanel.Dock="Right" Content="↓" Width="20" Click="PerehPytDown_Click"/>
+                <Button x:Name="PerehPytUp" DockPanel.Dock="Right" Content="↑" Width="20" HorizontalAlignment="Right" Click="PerehPytUp_Click"/>
                 <Button DockPanel.Dock="Right" Content="Видалити" HorizontalAlignment="Right" Padding="0"/>
             </DockPanel>
             <TextBox x:Name="poleVivedPitan" Grid.Column="0" Grid.Row="8" Text=""/>

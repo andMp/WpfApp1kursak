@@ -57,8 +57,12 @@ namespace WpfApp1kursak
                     }
                     else
                     {
-                        User userPage = new User();
-                        MainFrame.Navigate(userPage);
+                        //User userPage = new User();
+                        //MainFrame.Navigate(userPage);
+                        MessageBox.Show("Заходимо на користувача!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
+                        SecondGrid.Visibility = Visibility.Collapsed;// Сховати
+                        MainFrame.Content = null;
+                        MainFrame.Navigate(new User(phoneText));
                     }
                 }
                 else

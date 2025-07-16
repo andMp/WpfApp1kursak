@@ -35,7 +35,8 @@ namespace WpfApp1kursak
             InitializeComponent();
             LoadUsers();
             LoadOpituv();
-            idAdmina = id;
+            //idAdmina = id;
+            this.id.Text = id;
         }
 
         private void LoadUsers()
@@ -210,52 +211,23 @@ namespace WpfApp1kursak
 
         private void OpitList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
+            if (OpitList.SelectedItem is Opituv selectedOp)
             {
-                if (OpitList.SelectedItem is Opituv selectedOp)
-                {
-                    MessageBox.Show("Опитування вибрано: " + (selectedOp?.Tema ?? "null"));
+                temaOp.Text = selectedOp.Tema;
+                trivOp.Text = selectedOp.TrivOp;
 
-                    temaOp.Text = selectedOp.Tema;
-                    trivOp.Text = selectedOp.TrivOp;
-                    if (DateTime.TryParse(selectedOp.DataPoch, out DateTime dp))
-                        datPochOp.SelectedDate = dp;
-                    if (DateTime.TryParse(selectedOp.DataZupin, out DateTime dz))
-                        datZaverOp.SelectedDate = dz;
-                    rivDostOp.Text = selectedOp.RivDost;
+                if (DateTime.TryParse(selectedOp.DataPoch, out DateTime dp))
+                    datPochOp.SelectedDate = dp;
 
-                    if (selectedOp.Pitanni == null)
-                    {
-                        MessageBox.Show("Pitanni є NULL. Створюємо новий список.");
-                        selectedOp.Pitanni = new List<Pytannia>();
-                    }
+                if (DateTime.TryParse(selectedOp.DataZupin, out DateTime dz))
+                    datZaverOp.SelectedDate = dz;
 
-                    vsogo.Text = selectedOp.Pitanni.Count.ToString();
-                    PitanVsogo = selectedOp.Pitanni.Count;
+                rivDostOp.Text = selectedOp.RivDost;
 
-                    if (selectedOp.Pitanni.Count > 0)
-                    {
-                        PitanVRob = 0;
-                        diysn.Text = "1";
-                        poleVivedPitan.Text = selectedOp.Pitanni[PitanVRob].Pitan;
-                        chasNaVidpVidobr.Text = selectedOp.Pitanni[PitanVRob].TrivPit;
-                    }
-                    else
-                    {
-                        diysn.Text = "0";
-                        PitanVRob = 0;
-                        poleVivedPitan.Text = "-";
-                        chasNaVidpVidobr.Text = "-";
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("OpitList.SelectedItem не є Opituv");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("❌ Помилка при виборі опитування: " + ex.Message);
+                PitanVsogo = selectedOp.Pitanni?.Count ?? 0;
+                PitanVRob = 0;
+
+                OnovytyPerehliadPytannia(selectedOp);
             }
         }
 
@@ -291,13 +263,24 @@ namespace WpfApp1kursak
             if (OpitList.SelectedItem is Opituv selectedOp)
             {
                 selectedOp.Tema = temaOp.Text;
-                selectedOp.TrivOp = trivOp.Text;
+                if (!int.TryParse(trivOp.Text, out int hvylyny) || hvylyny <= 0)
+                {
+                    MessageBox.Show("Введіть коректну тривалість опитування у хвилинах!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                selectedOp.TrivOp = hvylyny.ToString();
+                //selectedOp.TrivOp = trivOp.Text;
                 selectedOp.DataPoch = datPochOp.SelectedDate?.ToString("yyyy-MM-dd") ?? "";
                 selectedOp.DataZupin = datZaverOp.SelectedDate?.ToString("yyyy-MM-dd") ?? "";
                 selectedOp.RivDost = rivDostOp.Text;
 
                 UpdateOpituvInDatabase(selectedOp);
                 MessageBox.Show("Зміни збережені!");
+                OpitList.ItemsSource = null;
+                OpitList.ItemsSource = slovnOp.Values
+                    .Where(x => x != null && x.Op != null)
+                    .SelectMany(x => x.Op)
+                    .ToList();
             }
         }
 
@@ -354,17 +337,84 @@ namespace WpfApp1kursak
                 MessageBox.Show("Будь ласка, заповніть усі поля!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            Pytannia pit = new Pytannia();
-            pit.Pitan = pitannDlaOpit;
-            pit.TrivPit = poleChasNaVidpVkaz;
+
+            Pytannia pit = new Pytannia
+            {
+                Pitan = pitannDlaOpit,
+                TrivPit = poleChasNaVidpVkaz
+            };
 
             if (OpitList.SelectedItem is Opituv selectedOp)
             {
+                if (selectedOp.Pitanni == null)
+                    selectedOp.Pitanni = new List<Pytannia>();
+
                 selectedOp.Pitanni.Add(pit);
                 UpdateOpituvInDatabase(selectedOp);
-                MessageBox.Show("Зміни збережені!");
+
+                MessageBox.Show("Питання додано!");
+
+                // Очистка полів
+                dodPitOp.Text = string.Empty;
+                chasNaVidpVkazati.Text = string.Empty;
+
+                // Оновити лічильник і показати останнє питання
+                PitanVsogo = selectedOp.Pitanni.Count;
+                PitanVRob = PitanVsogo - 1;
+
+                OnovytyPerehliadPytannia(selectedOp);
             }
         }
+
+        private void OnovytyPerehliadPytannia(Opituv opituv)
+        {
+            if (opituv.Pitanni == null || opituv.Pitanni.Count == 0)
+            {
+                diysn.Text = "0";
+                vsogo.Text = "0";
+                poleVivedPitan.Text = "-";
+                chasNaVidpVidobr.Text = "-";
+                PerehPytUp.IsEnabled = false;
+                PerehPytDown.IsEnabled = false;
+                return;
+            }
+
+            if (PitanVRob < 0) PitanVRob = 0;
+            if (PitanVRob >= opituv.Pitanni.Count) PitanVRob = opituv.Pitanni.Count - 1;
+
+            diysn.Text = (PitanVRob + 1).ToString();
+            vsogo.Text = opituv.Pitanni.Count.ToString();
+            poleVivedPitan.Text = opituv.Pitanni[PitanVRob].Pitan;
+            chasNaVidpVidobr.Text = opituv.Pitanni[PitanVRob].TrivPit;
+
+            PerehPytUp.IsEnabled = PitanVRob > 0;
+            PerehPytDown.IsEnabled = PitanVRob < opituv.Pitanni.Count - 1;
+        }
+
+
+        private void PerehPytUp_Click(object sender, RoutedEventArgs e)
+        {
+            if (OpitList.SelectedItem is Opituv selectedOp && selectedOp.Pitanni?.Count > 0)
+            {
+                if (PitanVRob > 0)
+                {
+                    PitanVRob--;
+                    OnovytyPerehliadPytannia(selectedOp);
+                }
+            }
+        }
+        private void PerehPytDown_Click(object sender, RoutedEventArgs e)
+        {
+            if (OpitList.SelectedItem is Opituv selectedOp && selectedOp.Pitanni?.Count > 0)
+            {
+                if (PitanVRob < selectedOp.Pitanni.Count - 1)
+                {
+                    PitanVRob++;
+                    OnovytyPerehliadPytannia(selectedOp);
+                }
+            }
+        }
+
 
         private void stvorNovTemOpit(object sender, RoutedEventArgs e)
         {
@@ -411,6 +461,11 @@ namespace WpfApp1kursak
             {
                 MessageBox.Show("Сталася помилка в stvorNovTemOpit: " + ex.Message, "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void TrivOp_PreviewTextInput(object sender, TextCompositionEventArgs e) //в "трив.опит." тільки цифри
+        {
+            e.Handled = !int.TryParse(e.Text, out _);
         }
     }
 }
