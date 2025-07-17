@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace WpfApp1kursak
 {
-    class Osoba
+    public class Osoba
     {
         public int Id { get; set; }
         public string Tel { get; set; }
