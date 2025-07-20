@@ -10,7 +10,7 @@
 
     <Grid Background="LightGray" ShowGridLines="True">
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30" ></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -18,7 +18,7 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="id" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="id" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center"/>
         <Grid Grid.Column="0" Grid.Row="1" ShowGridLines="True">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
@@ -43,19 +43,35 @@
             <TextBlock x:Name="rivDostBox" Grid.Row="4" Grid.Column="1"/>
             <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Content="Зберегти зміни" Margin="80,7" BorderBrush="DarkBlue" Click="SaveChanges_Click"/>
         </Grid>
-        <Grid Grid.Column="1" Grid.Row="2" ShowGridLines="True">
+        <Grid x:Name="middleColumn" Grid.Column="1" Grid.Row="1" ShowGridLines="True">
             <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center">Список опитувань:</TextBlock>
-            <ScrollViewer Grid.Row="1">
-                <ListBox x:Name="OpitList" SelectionChanged="OpitList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel" DisplayMemberPath="Tema">
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible">
+                <ListBox x:Name="OpitList" PreviewMouseWheel="UserList_PreviewMouseWheel">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock FontWeight="Bold" Text="{Binding Tema}"/>
+                                <TextBlock FontSize="12">
+                                    <Run Text=" Питань: "/>
+                                    <TextBlock Text="{Binding KstPitann, Mode=OneWay}" />
+                                    <Run Text=" Тр-сть: "/>
+                                    <Run Text="{Binding TrivOp, Mode=OneWay}"/>     
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </ListBox>
             </ScrollViewer>
+            <Button x:Name="startOp" Grid.Row="2" Content="Розпочати опитування!" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="DarkBlue" Click="goToOpituvClick"/>
         </Grid>
         <Grid Grid.Column="2" Grid.Row="1" ShowGridLines="True">
             <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -70,12 +86,35 @@
             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextAlignment="Center" VerticalAlignment="Center">Проходження опитування:</TextBlock>
             <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Тема:</TextBlock>
             <TextBlock x:Name="temaOp" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
-            <TextBlock x:Name="nomPit" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
-            <TextBlock x:Name="pit" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
-            <TextBlock x:Name="chasNaVidp" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
-            <Button x:Name="yes" Grid.Row="4" Grid.Column="0" Content="Так" Margin="33,7" BorderBrush="DarkBlue"/>
-            <Button x:Name="no" Grid.Row="4" Grid.Column="1" Content="Ні" Margin="33,7" BorderBrush="DarkBlue"/>
-            <Button x:Name="endGol" Grid.Row="5" Grid.Column="0" Margin="53,7" Grid.ColumnSpan="2" BorderBrush="DarkBlue">Завершити голосування</Button>
+            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Залишилось часу:</TextBlock>
+            <TextBlock x:Name="zalChas" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
+            <TextBlock x:Name="nomPit" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+            <DockPanel Grid.Column="1" Grid.Row="3">
+                <!-- Лівий текст -->
+                <TextBlock x:Name="pit" DockPanel.Dock="Left" Width="110" VerticalAlignment="Center"/>
+                <!-- Права панель зі стрілками -->
+                <Grid DockPanel.Dock="Right" VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Button Content="˄" Grid.Row="0" Click="PrevQuestion_Click"/>
+                    <Button Content="˅" Grid.Row="1" Click="NextQuestion_Click"/>
+                </Grid>
+            </DockPanel>
+
+            <!--<TextBlock x:Name="nomPit" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
+            
+            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Button Content="⬆️" Click="PrevQuestion_Click" Margin="5" Width="50"/>
+                <Button Content="⬇️" Click="NextQuestion_Click" Margin="5" Width="50"/>
+            </StackPanel>-->
+
+            <!--<TextBlock x:Name="pit" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>-->
+            <TextBlock x:Name="vidpNaPit" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
+            <Button x:Name="yes" Grid.Row="5" Grid.Column="0" Content="Так" Margin="33,7" BorderBrush="DarkBlue" Click="yes_Click"/>
+            <Button x:Name="no" Grid.Row="5" Grid.Column="1" Content="Ні" Margin="33,7" BorderBrush="DarkBlue" Click="no_Click"/>
+            <Button x:Name="endGol" Grid.Row="6" Grid.Column="0" Margin="53,7" Grid.ColumnSpan="2" BorderBrush="DarkBlue" Click="endGol_Click">Завершити голосування</Button>
         </Grid>
     </Grid>
 </Page>

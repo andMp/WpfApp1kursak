@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -157,7 +158,6 @@ namespace WpfApp1kursak
             return null;
         }
 
-
         private void VidOblZapButClick(object sender, RoutedEventArgs e)
         {
             if (UserList.SelectedItem is Osoba selectedUser)
@@ -194,7 +194,6 @@ namespace WpfApp1kursak
             }
         }
 
-
         public string SerializeOpituv(Opituvanna opituv)
         {
             return JsonConvert.SerializeObject(opituv);
@@ -228,8 +227,10 @@ namespace WpfApp1kursak
                 PitanVRob = 0;
 
                 OnovytyPerehliadPytannia(selectedOp);
+                OnovytyStatystyku(selectedOp);
             }
         }
+
 
 
         private Dictionary<string, Opituvanna> GetOpituvFromDatabase()
@@ -263,12 +264,12 @@ namespace WpfApp1kursak
             if (OpitList.SelectedItem is Opituv selectedOp)
             {
                 selectedOp.Tema = temaOp.Text;
-                if (!int.TryParse(trivOp.Text, out int hvylyny) || hvylyny <= 0)
-                {
-                    MessageBox.Show("Введіть коректну тривалість опитування у хвилинах!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-                selectedOp.TrivOp = hvylyny.ToString();
+                //if (!int.TryParse(trivOp.Text, out int hvylyny) || hvylyny <= 0)
+                //{
+                //    MessageBox.Show("Введіть коректну тривалість опитування у хвилинах!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //    return;
+                //}
+                //selectedOp.TrivOp = hvylyny.ToString();
                 //selectedOp.TrivOp = trivOp.Text;
                 selectedOp.DataPoch = datPochOp.SelectedDate?.ToString("yyyy-MM-dd") ?? "";
                 selectedOp.DataZupin = datZaverOp.SelectedDate?.ToString("yyyy-MM-dd") ?? "";
@@ -347,7 +348,9 @@ namespace WpfApp1kursak
             if (OpitList.SelectedItem is Opituv selectedOp)
             {
                 if (selectedOp.Pitanni == null)
-                    selectedOp.Pitanni = new List<Pytannia>();
+                    //selectedOp.Pitanni = new List<Pytannia>();
+                    selectedOp.Pitanni = new ObservableCollection<Pytannia>();
+
 
                 selectedOp.Pitanni.Add(pit);
                 UpdateOpituvInDatabase(selectedOp);
@@ -463,10 +466,136 @@ namespace WpfApp1kursak
             }
         }
 
-        private void TrivOp_PreviewTextInput(object sender, TextCompositionEventArgs e) //в "трив.опит." тільки цифри
+        //private void TrivOp_PreviewTextInput(object sender, TextCompositionEventArgs e) //в "трив.опит." тільки цифри
+        //{
+        //    e.Handled = !int.TryParse(e.Text, out _);
+        //}
+
+        private void OnovytyStatystyku(Opituv opituv)
         {
-            e.Handled = !int.TryParse(e.Text, out _);
+            if (opituv.Pitanni == null || opituv.Pitanni.Count == 0)
+            {
+                SetStatystyka("-", "-", "-");
+                return;
+            }
+
+            int tak = 0;
+            int ni = 0;
+            int neVklylys = 0;
+
+            foreach (var pyt in opituv.Pitanni)
+            {
+                switch (pyt.Vidp)
+                {
+                    case 1: tak += pyt.KstVidp; break;
+                    case 0: ni += pyt.KstVidp; break;
+                    case 2: neVklylys += pyt.KstVidp; break;
+                }
+            }
+
+            SetStatystyka(tak.ToString(), ni.ToString(), neVklylys.ToString());
         }
+        private void SetStatystyka(string tak, string ni, string nevklylys)
+        {
+            foreach (var child in LogicalTreeHelper.GetChildren(this))
+            {
+                if (child is Grid grid)
+                {
+                    foreach (var el in grid.Children)
+                    {
+                        if (el is TextBlock tb)
+                        {
+                            switch (tb.Text)
+                            {
+                                case "Так":
+                                    Grid.SetRow(tb, 2); Grid.SetColumn(tb, 1);
+                                    tb.Text = tak;
+                                    break;
+                                case "Ні":
+                                    Grid.SetRow(tb, 3); Grid.SetColumn(tb, 1);
+                                    tb.Text = ni;
+                                    break;
+                                case "Не вклались в час":
+                                    Grid.SetRow(tb, 4); Grid.SetColumn(tb, 1);
+                                    tb.Text = nevklylys;
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void vidPitInActive_click(object sender, RoutedEventArgs e)
+        {
+            if (OpitList.SelectedItem is Opituv selectedOp)
+            {
+                if (selectedOp.Pitanni == null || selectedOp.Pitanni.Count == 0)
+                {
+                    MessageBox.Show("В опитуванні немає питань для видалення.", "Увага", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                MessageBoxResult result = MessageBox.Show(
+                    $"Ви дійсно хочете видалити поточне питання:\n\"{selectedOp.Pitanni[PitanVRob].Pitan}\"?",
+                    "Підтвердження видалення питання",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        // Видаляємо питання
+                        selectedOp.Pitanni.RemoveAt(PitanVRob);
+
+                        // Якщо індекс вийшов за межі, коригуємо
+                        if (PitanVRob >= selectedOp.Pitanni.Count)
+                            PitanVRob = selectedOp.Pitanni.Count - 1;
+
+                        // Оновлюємо словник з опитуваннями
+                        if (slovnOp.TryGetValue(selectedOp.Telef, out Opituvanna opituvanna))
+                        {
+                            int index = opituvanna.Op.FindIndex(o => o.Tema == selectedOp.Tema);
+                            if (index != -1)
+                            {
+                                opituvanna.Op[index] = selectedOp;
+                                slovnOp[selectedOp.Telef] = opituvanna;
+
+                                // Серіалізуємо та зберігаємо в БД
+                                string serOpituv = SerializeOpituv(opituvanna);
+                                using (SqlConnection conn = new SqlConnection(connectionString))
+                                {
+                                    conn.Open();
+                                    string query = "UPDATE Users SET Opit = @Opit WHERE Tel = @Tel";
+                                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                                    {
+                                        cmd.Parameters.AddWithValue("@Opit", serOpituv);
+                                        cmd.Parameters.AddWithValue("@Tel", selectedOp.Telef);
+                                        cmd.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                        }
+
+                        // Оновити відображення питання та статистику
+                        OnovytyPerehliadPytannia(selectedOp);
+                        OnovytyStatystyku(selectedOp);
+
+                        MessageBox.Show("Питання успішно видалено.", "Видалення", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Помилка при видаленні питання: " + ex.Message, "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Оберіть опитування та питання для видалення.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
     }
 }
 
