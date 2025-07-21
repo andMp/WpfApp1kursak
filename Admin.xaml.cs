@@ -36,7 +36,7 @@ namespace WpfApp1kursak
             InitializeComponent();
             LoadUsers();
             LoadOpituv();
-            //idAdmina = id;
+            idAdmina = id;
             this.id.Text = id;
         }
 
@@ -54,7 +54,6 @@ namespace WpfApp1kursak
         private List<Osoba> GetUsersFromDatabase()
         {
             List<Osoba> us = new List<Osoba>();
-            //string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -86,10 +85,6 @@ namespace WpfApp1kursak
                 parAdm.Text = selectedUser.Parol;
                 posAdm.Text = selectedUser.Posada.ToString();
                 rivAdm.Text = selectedUser.RivDostupu.ToString();
-                //if (selectedUser.Posada == 1)
-                //{
-                //    GetOpituvFromDatabase(selectedUser.Tel);
-                //}
             }
         }
 
@@ -118,7 +113,6 @@ namespace WpfApp1kursak
 
         private void UpdateUserInDatabase(Osoba user)
         {
-            //string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -204,10 +198,6 @@ namespace WpfApp1kursak
             return JsonConvert.DeserializeObject<Opituvanna>(json);
         }
 
-        //##########################################################################################################################
-        //##########################################################################################################################
-        //##########################################################################################################################
-
         private void OpitList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (OpitList.SelectedItem is Opituv selectedOp)
@@ -230,8 +220,6 @@ namespace WpfApp1kursak
                 OnovytyStatystyku(selectedOp);
             }
         }
-
-
 
         private Dictionary<string, Opituvanna> GetOpituvFromDatabase()
         {
@@ -264,13 +252,6 @@ namespace WpfApp1kursak
             if (OpitList.SelectedItem is Opituv selectedOp)
             {
                 selectedOp.Tema = temaOp.Text;
-                //if (!int.TryParse(trivOp.Text, out int hvylyny) || hvylyny <= 0)
-                //{
-                //    MessageBox.Show("Введіть коректну тривалість опитування у хвилинах!", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                //    return;
-                //}
-                //selectedOp.TrivOp = hvylyny.ToString();
-                //selectedOp.TrivOp = trivOp.Text;
                 selectedOp.DataPoch = datPochOp.SelectedDate?.ToString("yyyy-MM-dd") ?? "";
                 selectedOp.DataZupin = datZaverOp.SelectedDate?.ToString("yyyy-MM-dd") ?? "";
                 selectedOp.RivDost = rivDostOp.Text;
@@ -287,18 +268,6 @@ namespace WpfApp1kursak
 
         private void UpdateOpituvInDatabase(Opituv op)
         {
-            //Opituvanna opit=new Opituvanna();
-            ////newOp = slovnOp[op.Telef].Op.Where(o => o.Tema == op.Tema);
-            ////slovnOp[op.Telef].Op[slovnOp[op.Telef].Op.FindIndex(o => o.Tema == op.Tema)]=op;
-
-            //opit.Op = slovnOp[op.Telef].Op;
-            //int index = opit.Op.FindIndex(o => o.Tema == op.Tema);
-            //if (index != -1)
-            //{
-            //    opit.Op[index] = op;
-            //}
-
-            //SerializeOpituv(opit);
             if (slovnOp.TryGetValue(op.Telef, out Opituvanna opit))
             {
                 int index = opit.Op.FindIndex(o => o.Tema == op.Tema);
@@ -306,12 +275,9 @@ namespace WpfApp1kursak
                 {
                     opit.Op[index] = op;
 
-                    // Зберігаємо назад у словник — хоча посилання те саме, це необов'язково, але можна явно
                     slovnOp[op.Telef] = opit;
 
-                    // Серіалізуємо вже оновлений словник або об'єкт
                     string serOpituv = SerializeOpituv(opit);
-                    //string connectionString = "Server=WIN-DVNHOAUCHN7;Database=Opituvanna;Integrated Security=True;";
                     using (SqlConnection conn = new SqlConnection(connectionString))
                     {
                         conn.Open();
@@ -348,25 +314,25 @@ namespace WpfApp1kursak
             if (OpitList.SelectedItem is Opituv selectedOp)
             {
                 if (selectedOp.Pitanni == null)
-                    //selectedOp.Pitanni = new List<Pytannia>();
                     selectedOp.Pitanni = new ObservableCollection<Pytannia>();
-
 
                 selectedOp.Pitanni.Add(pit);
                 UpdateOpituvInDatabase(selectedOp);
 
                 MessageBox.Show("Питання додано!");
 
-                // Очистка полів
                 dodPitOp.Text = string.Empty;
                 chasNaVidpVkazati.Text = string.Empty;
 
-                // Оновити лічильник і показати останнє питання
                 PitanVsogo = selectedOp.Pitanni.Count;
                 PitanVRob = PitanVsogo - 1;
-
                 OnovytyPerehliadPytannia(selectedOp);
             }
+            else
+            {
+                MessageBox.Show("Оберіть опитування перед додаванням питання.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
         }
 
         private void OnovytyPerehliadPytannia(Opituv opituv)
@@ -394,7 +360,6 @@ namespace WpfApp1kursak
             PerehPytDown.IsEnabled = PitanVRob < opituv.Pitanni.Count - 1;
         }
 
-
         private void PerehPytUp_Click(object sender, RoutedEventArgs e)
         {
             if (OpitList.SelectedItem is Opituv selectedOp && selectedOp.Pitanni?.Count > 0)
@@ -418,12 +383,11 @@ namespace WpfApp1kursak
             }
         }
 
-
         private void stvorNovTemOpit(object sender, RoutedEventArgs e)
         {
             try
             {
-                MessageBox.Show("Починаємо створювати опитув.1");
+                MessageBox.Show("Починаємо створювати опитування");
                 string newTemaOpit = vvedNovTem.Text?.Trim();
                 if (string.IsNullOrEmpty(newTemaOpit))
                 {
@@ -459,17 +423,19 @@ namespace WpfApp1kursak
                     };
                 }
                 UpdateOpituvInDatabase(novOp);
+                OpitList.ItemsSource = null;
+                OpitList.ItemsSource = slovnOp.Values
+                    .Where(x => x != null && x.Op != null)
+                    .SelectMany(x => x.Op)
+                    .ToList();
+                vvedNovTem.Text = string.Empty;
+                MessageBox.Show("Опитування успішно створено!", "Готово", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Сталася помилка в stvorNovTemOpit: " + ex.Message, "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        //private void TrivOp_PreviewTextInput(object sender, TextCompositionEventArgs e) //в "трив.опит." тільки цифри
-        //{
-        //    e.Handled = !int.TryParse(e.Text, out _);
-        //}
 
         private void OnovytyStatystyku(Opituv opituv)
         {
@@ -492,38 +458,13 @@ namespace WpfApp1kursak
                     case 2: neVklylys += pyt.KstVidp; break;
                 }
             }
-
             SetStatystyka(tak.ToString(), ni.ToString(), neVklylys.ToString());
         }
         private void SetStatystyka(string tak, string ni, string nevklylys)
         {
-            foreach (var child in LogicalTreeHelper.GetChildren(this))
-            {
-                if (child is Grid grid)
-                {
-                    foreach (var el in grid.Children)
-                    {
-                        if (el is TextBlock tb)
-                        {
-                            switch (tb.Text)
-                            {
-                                case "Так":
-                                    Grid.SetRow(tb, 2); Grid.SetColumn(tb, 1);
-                                    tb.Text = tak;
-                                    break;
-                                case "Ні":
-                                    Grid.SetRow(tb, 3); Grid.SetColumn(tb, 1);
-                                    tb.Text = ni;
-                                    break;
-                                case "Не вклались в час":
-                                    Grid.SetRow(tb, 4); Grid.SetColumn(tb, 1);
-                                    tb.Text = nevklylys;
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
+            takCount.Text = tak;
+            niCount.Text = ni;
+            nevklylysCount.Text = nevklylys;
         }
 
         private void vidPitInActive_click(object sender, RoutedEventArgs e)
@@ -535,7 +476,6 @@ namespace WpfApp1kursak
                     MessageBox.Show("В опитуванні немає питань для видалення.", "Увага", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
-
                 MessageBoxResult result = MessageBox.Show(
                     $"Ви дійсно хочете видалити поточне питання:\n\"{selectedOp.Pitanni[PitanVRob].Pitan}\"?",
                     "Підтвердження видалення питання",
@@ -546,14 +486,11 @@ namespace WpfApp1kursak
                 {
                     try
                     {
-                        // Видаляємо питання
                         selectedOp.Pitanni.RemoveAt(PitanVRob);
 
-                        // Якщо індекс вийшов за межі, коригуємо
                         if (PitanVRob >= selectedOp.Pitanni.Count)
                             PitanVRob = selectedOp.Pitanni.Count - 1;
 
-                        // Оновлюємо словник з опитуваннями
                         if (slovnOp.TryGetValue(selectedOp.Telef, out Opituvanna opituvanna))
                         {
                             int index = opituvanna.Op.FindIndex(o => o.Tema == selectedOp.Tema);
@@ -562,7 +499,6 @@ namespace WpfApp1kursak
                                 opituvanna.Op[index] = selectedOp;
                                 slovnOp[selectedOp.Telef] = opituvanna;
 
-                                // Серіалізуємо та зберігаємо в БД
                                 string serOpituv = SerializeOpituv(opituvanna);
                                 using (SqlConnection conn = new SqlConnection(connectionString))
                                 {
@@ -578,7 +514,6 @@ namespace WpfApp1kursak
                             }
                         }
 
-                        // Оновити відображення питання та статистику
                         OnovytyPerehliadPytannia(selectedOp);
                         OnovytyStatystyku(selectedOp);
 

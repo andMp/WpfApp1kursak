@@ -25,7 +25,6 @@
         <!-- Перегляд та редагування опитування -->
         <ScrollViewer Grid.Column="0" Grid.Row="2">
             <ListBox x:Name="OpitList" SelectionChanged="OpitList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel" DisplayMemberPath="Tema">
-                 <!--Сюди будуть додаватися елементи списку--> 
             </ListBox>
         </ScrollViewer>
 
@@ -51,12 +50,10 @@
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Тема" HorizontalAlignment="Left"/>
             <TextBox x:Name="temaOp" Grid.Column="1" Grid.Row="1" TextAlignment="Center" VerticalContentAlignment="Center"/>
             <TextBlock Grid.Column="0" Grid.Row="2" Text="Трив-сть опитув. (хв.)" HorizontalAlignment="Left"/>
-            <!--<TextBox x:Name="trivOp" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalContentAlignment="Center" PreviewTextInput="TrivOp_PreviewTextInput" MaxLength="3"/>-->
             <TextBlock x:Name="trivOp" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Grid.Column="0" Grid.Row="3" Text="Дата початку" HorizontalAlignment="Left"/>
             <DatePicker x:Name="datPochOp" Grid.Column="1" Grid.Row="3" SelectedDateFormat="Short" Height="35"/>
             <TextBlock Grid.Column="0" Grid.Row="4" Text="Дата завершення" HorizontalAlignment="Left"/>
-            <!--<TextBox x:Name="datZaverOp" Grid.Column="1" Grid.Row="4" TextAlignment="Center" VerticalContentAlignment="Center"/>-->
             <DatePicker x:Name="datZaverOp" Grid.Column="1" Grid.Row="4" SelectedDateFormat="Short"/>
             <TextBlock Grid.Column="0" Grid.Row="5" Text="Рівень доступу" HorizontalAlignment="Left"/>
             <TextBox x:Name="rivDostOp" Grid.Column="1" Grid.Row="5" TextAlignment="Center" VerticalContentAlignment="Center"/>
@@ -86,8 +83,6 @@
                 <TextBlock DockPanel.Dock="Top" Text="Час для відповіді:" HorizontalAlignment="Center" />
                 <TextBox x:Name="chasNaVidpVkazati"/>
             </DockPanel>
-            <!--<TextBlock Grid.Column="0" Grid.Row="10" Text="Час на відповідь"/>
-            <TextBox x:Name="chasNaVidpOp" Grid.Column="1" Grid.Row="10" Text=""/>-->
         </Grid>
         
         
@@ -138,7 +133,6 @@
         <!-- Список користувачів -->
         <ScrollViewer Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2">
             <ListBox x:Name="UserList" SelectionChanged="UserList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel" DisplayMemberPath="Tel">
-                <!-- Сюди будуть додаватися елементи списку -->
             </ListBox>
         </ScrollViewer>
         <Grid Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" ShowGridLines="True">

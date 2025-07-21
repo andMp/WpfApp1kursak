@@ -39,7 +39,6 @@ namespace WpfApp1kursak
             {
                 InitializeComponent();
                 currentUser = GetUserFromDatabase(id);
-
                 if (currentUser != null)
                 {
                     this.id.Text = $"Особистий кабінет користувача з телефоном: {currentUser.Tel}";
@@ -89,6 +88,9 @@ namespace WpfApp1kursak
 
         public Opituvanna DeserializeOpituv(string json)
         {
+            if (string.IsNullOrWhiteSpace(json))
+                return new Opituvanna();
+
             return JsonConvert.DeserializeObject<Opituvanna>(json);
         }
 
@@ -172,6 +174,11 @@ namespace WpfApp1kursak
 
         private void goToOpituvClick(object sender, RoutedEventArgs e)
         {
+            if (OpitList.SelectedItem == null)
+            {
+                MessageBox.Show("Оберіть опитування!");
+                return;
+            }
             if (OpitList.SelectedItem is Opituv selectedOp)
             {
                 activeOpituv = selectedOp;
@@ -212,20 +219,17 @@ namespace WpfApp1kursak
         {
             if (activeOpituv == null || activeOpituv.Pitanni == null || !activeOpituv.Pitanni.Any())
                 return;
-
-            var pit = activeOpituv.Pitanni[currentQuestionIndex];
-
+            var pyt = activeOpituv.Pitanni[currentQuestionIndex];
             nomPit.Text = $"Питання {currentQuestionIndex + 1}/{activeOpituv.Pitanni.Count}";
-            this.pit.Text = pit.Pitan;
+            this.pit.Text = pyt.Pitan;
 
-            string status = pit.Vidp switch
+            string status = pyt.Vidp switch
             {
                 0 => "Ні",
                 1 => "Так",
                 2 => "Не вклались в час",
                 _ => "-"
             };
-
             vidpNaPit.Text = $"Відповідь: {status}";
         }
         private void CheckIfAllAnswered()
@@ -238,7 +242,6 @@ namespace WpfApp1kursak
         private void AnswerQuestion(int answer)
         {
             if (activeOpituv == null) return;
-
             activeOpituv.Pitanni[currentQuestionIndex].Vidp = answer;
             ShowCurrentQuestion();
             CheckIfAllAnswered();
@@ -254,7 +257,7 @@ namespace WpfApp1kursak
         }
         private void NextQuestion_Click(object sender, RoutedEventArgs e)
         {
-            if (currentQuestionIndex < activeOpituv.Pitanni.Count - 1)
+            if (activeOpituv?.Pitanni != null && currentQuestionIndex < activeOpituv.Pitanni.Count - 1)
             {
                 currentQuestionIndex++;
                 ShowCurrentQuestion();
@@ -273,8 +276,15 @@ namespace WpfApp1kursak
                         pyt.KstVidp += 1;
                     }
                 }
+                var authorEntry = slovnOp.FirstOrDefault(kvp => kvp.Value?.Op?.Contains(activeOpituv) == true);
 
-                string serialized = JsonConvert.SerializeObject(activeOpituv);
+                if (authorEntry.Value == null)
+                {
+                    MessageBox.Show("Не вдалося знайти автора опитування.");
+                    return;
+                }
+
+                string serialized = JsonConvert.SerializeObject(authorEntry.Value);
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -284,12 +294,11 @@ namespace WpfApp1kursak
                     using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
                     {
                         cmd.Parameters.AddWithValue("@opit", serialized);
-                        cmd.Parameters.AddWithValue("@tel", currentUser.Tel);
+                        cmd.Parameters.AddWithValue("@tel", authorEntry.Key);
                         cmd.ExecuteNonQuery();
                     }
                 }
-
-                MessageBox.Show("Опитування завершене та збережене.");
+                MessageBox.Show("Опитування завершене та результати збережено.");
                 endGol.IsEnabled = false;
                 middleColumn.IsEnabled = true;
             }
@@ -301,7 +310,6 @@ namespace WpfApp1kursak
 
         private void yes_Click(object sender, RoutedEventArgs e) => AnswerQuestion(1);
         private void no_Click(object sender, RoutedEventArgs e) => AnswerQuestion(0);
-
 
         private void UserList_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {

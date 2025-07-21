@@ -101,16 +101,7 @@
                     <Button Content="˄" Grid.Row="0" Click="PrevQuestion_Click"/>
                     <Button Content="˅" Grid.Row="1" Click="NextQuestion_Click"/>
                 </Grid>
-            </DockPanel>
-
-            <!--<TextBlock x:Name="nomPit" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
-            
-            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Button Content="⬆️" Click="PrevQuestion_Click" Margin="5" Width="50"/>
-                <Button Content="⬇️" Click="NextQuestion_Click" Margin="5" Width="50"/>
-            </StackPanel>-->
-
-            <!--<TextBlock x:Name="pit" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>-->
+            </DockPanel>           
             <TextBlock x:Name="vidpNaPit" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
             <Button x:Name="yes" Grid.Row="5" Grid.Column="0" Content="Так" Margin="33,7" BorderBrush="DarkBlue" Click="yes_Click"/>
             <Button x:Name="no" Grid.Row="5" Grid.Column="1" Content="Ні" Margin="33,7" BorderBrush="DarkBlue" Click="no_Click"/>
