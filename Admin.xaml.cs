@@ -533,6 +533,3 @@ namespace WpfApp1kursak
 
     }
 }
-
-
-

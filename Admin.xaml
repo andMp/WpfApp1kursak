@@ -8,98 +8,165 @@
       d:DesignHeight="350" d:DesignWidth="700"
       Title="Admin">
 
-    <Grid Background="LightGray" MinHeight="300" Width="700" ShowGridLines="True">
+    <Grid Background="LightGray" MinHeight="300" Width="700" ShowGridLines="False" Margin="2">
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"></RowDefinition>
-            <RowDefinition Height="20"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="55"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="90"></ColumnDefinition>
-            <ColumnDefinition Width="90"></ColumnDefinition>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="90"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Перегляд та редагування опитування -->
-        <ScrollViewer Grid.Column="0" Grid.Row="2">
-            <ListBox x:Name="OpitList" SelectionChanged="OpitList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel" DisplayMemberPath="Tema">
-            </ListBox>
-        </ScrollViewer>
+        <!-- Перелік опитувань -->
+        <Border Grid.Column="0" Grid.Row="2" Margin="1" Background="White" BorderBrush="#CCC" BorderThickness="1" CornerRadius="2" Padding="1">
+            <ScrollViewer>
+                <ListBox x:Name="OpitList" SelectionChanged="OpitList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel" DisplayMemberPath="Tema" BorderThickness="0"/>
+            </ScrollViewer>
+        </Border>
 
-        <Grid Grid.Column="0" Grid.Row="3" ShowGridLines="True">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition Height="15.556"/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition Height="35"/>
-                <RowDefinition />
-                <RowDefinition Height="35"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Перегляд та редагування опитування:" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Column="0" Grid.Row="1" Text="Тема" HorizontalAlignment="Left"/>
-            <TextBox x:Name="temaOp" Grid.Column="1" Grid.Row="1" TextAlignment="Center" VerticalContentAlignment="Center"/>
-            <TextBlock Grid.Column="0" Grid.Row="2" Text="Трив-сть опитув. (хв.)" HorizontalAlignment="Left"/>
-            <TextBlock x:Name="trivOp" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="0" Grid.Row="3" Text="Дата початку" HorizontalAlignment="Left"/>
-            <DatePicker x:Name="datPochOp" Grid.Column="1" Grid.Row="3" SelectedDateFormat="Short" Height="35"/>
-            <TextBlock Grid.Column="0" Grid.Row="4" Text="Дата завершення" HorizontalAlignment="Left"/>
-            <DatePicker x:Name="datZaverOp" Grid.Column="1" Grid.Row="4" SelectedDateFormat="Short"/>
-            <TextBlock Grid.Column="0" Grid.Row="5" Text="Рівень доступу" HorizontalAlignment="Left"/>
-            <TextBox x:Name="rivDostOp" Grid.Column="1" Grid.Row="5" TextAlignment="Center" VerticalContentAlignment="Center"/>
-            <Button Grid.Column="0" Grid.Row="6" Content="Зберегти зміни" Click="ZberZmOpitButClick" Padding="0" Width="90" Grid.ColumnSpan="2"/>
-
-            <DockPanel Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2">
-                <TextBlock DockPanel.Dock="Left" Text="Питання: "/>
-                <TextBlock DockPanel.Dock="Left" x:Name="diysn" Text="0"/>
-                <TextBlock DockPanel.Dock="Left" Text="/" HorizontalAlignment="Left"/>
-                <TextBlock DockPanel.Dock="Left" x:Name="vsogo" Text="0"/>
-
-                <Button x:Name="PerehPytDown" DockPanel.Dock="Right" Content="↓" Width="20" Click="PerehPytDown_Click"/>
-                <Button x:Name="PerehPytUp" DockPanel.Dock="Right" Content="↑" Width="20" HorizontalAlignment="Right" Click="PerehPytUp_Click"/>
-                <Button DockPanel.Dock="Right" Content="Видалити" HorizontalAlignment="Right" Padding="0" Click="vidPitInActive_click"/>
-            </DockPanel>
-            <TextBox x:Name="poleVivedPitan" Grid.Column="0" Grid.Row="8" Text=""/>
-            <DockPanel Grid.Column="1" Grid.Row="8" LastChildFill="True">
-                <TextBlock DockPanel.Dock="Top" Text="Час для відповіді (хв.):" HorizontalAlignment="Center" />
-                <TextBox x:Name="chasNaVidpVidobr"/>
-            </DockPanel>
-
-
-            <TextBlock Grid.Column="0" Grid.Row="9" Text="Додавання питання:" TextAlignment="Center"/>
-            <Button Grid.Column="1" Grid.Row="9" Content="Додати" HorizontalAlignment="Center" Padding="0" Click="DodPitButClick"/>
-            <TextBox x:Name="dodPitOp" Grid.Column="0" Grid.Row="10" Text=""/>
-            <DockPanel Grid.Column="1" Grid.Row="10" LastChildFill="True">
-                <TextBlock DockPanel.Dock="Top" Text="Час для відповіді:" HorizontalAlignment="Center" />
-                <TextBox x:Name="chasNaVidpVkazati"/>
-            </DockPanel>
-        </Grid>
-        
-        
-        <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0"  Text="Для створення опитування введіть його тему:"/>
-            <TextBox x:Name="vvedNovTem" TextAlignment="Center" VerticalContentAlignment="Center" Grid.Row="1"/>
-            <Button Grid.Row="2" Content="Створити опитування" Width="130" HorizontalAlignment="Center" Click="stvorNovTemOpit"/>
-            
-            <Grid Grid.Column="0" Grid.Row="3">
+        <!-- Деталі опитування -->
+        <Border Grid.Column="0" Grid.Row="3" Margin="1" Background="White" BorderBrush="#CCC" BorderThickness="1" CornerRadius="6" Padding="1">
+            <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="24"/>
+                    <RowDefinition Height="24"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Перегляд та редагування опитування:" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,1"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Тема:" VerticalAlignment="Center" />
+                <TextBox x:Name="temaOp" Grid.Column="1" Grid.Row="1" TextAlignment="Center" VerticalContentAlignment="Center" Margin="2,1"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="Трив-сть опитув. (хв.):" VerticalAlignment="Center" />
+                <TextBlock x:Name="trivOp" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalAlignment="Center" Margin="2,1"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="3" Text="Дата початку:" VerticalAlignment="Center" />
+                <DatePicker x:Name="datPochOp" Grid.Column="1" Grid.Row="3" SelectedDateFormat="Short" Height="Auto" Margin="0"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="4" Text="Дата завершення:" VerticalAlignment="Center" />
+                <DatePicker x:Name="datZaverOp" Grid.Column="1" Grid.Row="4" SelectedDateFormat="Short" Height="Auto" Margin="0"/>
+
+                <TextBlock Grid.Column="0" Grid.Row="5" Text="Рівень доступу:" VerticalAlignment="Center" />
+                <TextBox x:Name="rivDostOp" Grid.Column="1" Grid.Row="5" TextAlignment="Center" VerticalContentAlignment="Center" Margin="2,1"/>
+
+                <Button Grid.Column="0" Grid.Row="6" Content="Зберегти зміни" Click="ZberZmOpitButClick" Padding="0" Width="130" Grid.ColumnSpan="2" Margin="0,1"/>
+
+                <DockPanel Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" LastChildFill="False" Margin="0">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center" >
+                        <TextBlock Text="Питання: " FontWeight="SemiBold" />
+                        <TextBlock x:Name="diysn" Text="0" Margin="0,0"/>
+                        <TextBlock Text="/" />
+                        <TextBlock x:Name="vsogo" Text="0" Margin="0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right" >
+                        <Button x:Name="PerehPytUp" Content="↑" Width="30" Margin="0,0" Click="PerehPytUp_Click"/>
+                        <Button x:Name="PerehPytDown" Content="↓" Width="30" Margin="0,0" Click="PerehPytDown_Click"/>
+                        <Button Content="Видалити" Padding="1,0" Margin="0,0" Click="vidPitInActive_click"/>
+                    </StackPanel>
+                </DockPanel>
+
+                <TextBox x:Name="poleVivedPitan" Grid.Column="0" Grid.Row="8" Margin="2" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="Wrap"/>
+
+                <StackPanel Grid.Column="1" Grid.Row="8" Margin="2" >
+                    <TextBlock Text="Час для відповіді (хв.):" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                    <TextBox x:Name="chasNaVidpVidobr" HorizontalAlignment="Stretch"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="0" Grid.Row="9" Text="Додавання питання:" TextAlignment="Center" FontWeight="Bold" Margin="0,1,0,1"/>
+                <Button Grid.Column="1" Grid.Row="9" Content="Додати" HorizontalAlignment="Center" Padding="1" Click="DodPitButClick" Margin="0,0,0,0"/>
+
+                <TextBox x:Name="dodPitOp" Grid.Column="0" Grid.Row="10" Margin="2" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="Wrap"/>
+
+                <StackPanel Grid.Column="1" Grid.Row="10" Margin="2">
+                    <TextBlock Text="Час для відповіді:" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                    <TextBox x:Name="chasNaVidpVkazati" HorizontalAlignment="Stretch"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Блок створення нового опитування та облік результатів -->
+        <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Margin="1" Background="White" BorderBrush="#CCC" BorderThickness="1" CornerRadius="2" Padding="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Для створення опитування введіть його тему:" VerticalAlignment="Center" Margin="0,0,0,2"/>
+                <TextBox x:Name="vvedNovTem" TextAlignment="Center" VerticalContentAlignment="Center" Grid.Row="1" Margin="0,0,0,2"/>
+
+                <Button Grid.Row="2" Content="Створити опитування" Width="140" HorizontalAlignment="Center" Click="stvorNovTemOpit"/>
+
+                <Border Grid.Row="3" Margin="0,1,0,0" BorderBrush="#CCC" BorderThickness="1" CornerRadius="2" Padding="1" Background="#FAFAFA">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Облік результатів:" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Загальна к-ть голосів:" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Так" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Ні" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="takCount" Grid.Row="2" Grid.Column="1" Text="-" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="niCount" Grid.Row="3" Grid.Column="1" Text="-" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Не вклались в час" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="nevklylysCount" Grid.Row="4" Grid.Column="1" Text="-" HorizontalAlignment="Center"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Заголовки -->
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Посада:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,1,0" FontWeight="Bold"/>
+        <TextBlock Grid.Column="2" Grid.Row="0" Text="Ваше ім'я:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,1,0" FontWeight="Bold"/>
+        <TextBlock Grid.Column="1" Grid.Row="0" Text="адмін" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBlock x:Name="id" Grid.Column="3" Grid.Row="0" VerticalAlignment="Center"/>
+
+        <TextBlock Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Text="Список всіх користувачів:" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,0,0,1"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Перелік всіх опитувань:" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,0,0,1"/>
+
+        <!-- Список користувачів -->
+        <Border Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Margin="5" Background="White" BorderBrush="#CCC" BorderThickness="1" CornerRadius="6" Padding="1">
+            <ScrollViewer>
+                <ListBox x:Name="UserList" SelectionChanged="UserList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel" DisplayMemberPath="Tel" BorderThickness="0"/>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Редагування користувача -->
+        <Border Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="2" Background="White" BorderBrush="#CCC" BorderThickness="1" CornerRadius="6" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -107,63 +174,24 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="85"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Облік результатів:" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Загальна к-ть голосів:" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Так" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Ні" HorizontalAlignment="Center"/>
-                <TextBlock x:Name="takCount" Grid.Row="2" Grid.Column="1" Text="-" HorizontalAlignment="Center"/>
-                <TextBlock x:Name="niCount" Grid.Row="3" Grid.Column="1" Text="-" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Не вклались в час" HorizontalAlignment="Center"/>
-                <TextBlock x:Name="nevklylysCount" Grid.Row="4" Grid.Column="1" Text="-" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Редагування користувача:" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,0,0,2"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Ім'я:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="Пароль:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Grid.Row="3" Text="Посада:" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Grid.Row="4" Text="Рівень доступу:" VerticalAlignment="Center"/>
+
+                <TextBox x:Name="telAdm" Grid.Column="1" Grid.Row="1" TextAlignment="Center" VerticalContentAlignment="Center" Margin="2"/>
+                <TextBox x:Name="parAdm" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalContentAlignment="Center" Margin="2"/>
+                <TextBox x:Name="posAdm" Grid.Column="1" Grid.Row="3" TextAlignment="Center" VerticalContentAlignment="Center" Margin="2"/>
+                <TextBox x:Name="rivAdm" Grid.Column="1" Grid.Row="4" TextAlignment="Center" VerticalContentAlignment="Center" Margin="2"/>
+
+                <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Content="Зберегти" Click="ZberZmKor" Height="25" Width="80" HorizontalAlignment="Center" Margin="2"/>
+                <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Content="Видалити користувача" Click="VidOblZapButClick" Height="25" Width="140" HorizontalAlignment="Center" Margin="2"/>
             </Grid>
-        </Grid>
-
-
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="Посада:" HorizontalAlignment="Right"/>
-        <TextBlock Grid.Column="2" Grid.Row="0" Text="Ваше ім'я: " HorizontalAlignment="Right"/>
-        <TextBlock Grid.Column="1" Grid.Row="0" Text=" адмін" HorizontalAlignment="Left"/>
-        <TextBlock x:Name="id" Grid.Column="3" Grid.Row="0"/>
-        <TextBlock Grid.Column="2" Grid.Row="1" Text="Список всіх користувачів:" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Column="0" Grid.Row="1" Text="Перелік всіх опитувань:" HorizontalAlignment="Center"/>
-
-        <!-- Список користувачів -->
-        <ScrollViewer Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2">
-            <ListBox x:Name="UserList" SelectionChanged="UserList_SelectionChanged" PreviewMouseWheel="UserList_PreviewMouseWheel" DisplayMemberPath="Tel">
-            </ListBox>
-        </ScrollViewer>
-        <Grid Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" ShowGridLines="True">
-            <!-- Детальна інформація -->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="85"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Редагування користувача:" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Column="0" Grid.Row="1" Text="Ім'я:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="0" Grid.Row="2" Text="Пароль:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="0" Grid.Row="3" Text="Посада:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="0" Grid.Row="4" Text="Рівень доступу:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-
-            <TextBox x:Name="telAdm" Grid.Column="1" Grid.Row="1" TextAlignment="Center" VerticalContentAlignment="Center"/>
-            <TextBox x:Name="parAdm" Grid.Column="1" Grid.Row="2" TextAlignment="Center" VerticalContentAlignment="Center"/>
-            <TextBox x:Name="posAdm" Grid.Column="1" Grid.Row="3" TextAlignment="Center" VerticalContentAlignment="Center"/>
-            <TextBox x:Name="rivAdm" Grid.Column="1" Grid.Row="4" TextAlignment="Center" VerticalContentAlignment="Center"/>
-
-            <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Content="Зберегти" Click="ZberZmKor" Height="20" Width="60" HorizontalAlignment="Center"/>
-            <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Content="Видалити користувача" Click="VidOblZapButClick" Height="20" Width="130" HorizontalAlignment="Center"/>
-        </Grid>
+        </Border>
     </Grid>
 </Page>
